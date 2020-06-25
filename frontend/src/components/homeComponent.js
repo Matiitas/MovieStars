@@ -21,7 +21,7 @@ class Home extends Component {
     return (
       <div>
         <NavBar />
-        <h1>Home</h1>
+        <h1>Home es aqui</h1>
       </div>
     );
   }
