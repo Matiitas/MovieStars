@@ -22,7 +22,7 @@ module.exports = {
     newUser = new User({ username, email, password });
     newUser
       .save()
-      .then(() => res.json({ message: "User added" }))
+      .then(() => res.json({ message: "User added succesfully" }))
       .catch((err) => res.status(400).json("Error: " + err));
   },
   /////////////////////////////////////////////////////////////////////
