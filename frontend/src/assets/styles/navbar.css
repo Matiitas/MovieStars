@@ -1,0 +1,128 @@
+nav ul li.nav-title a {
+  text-decoration: none;
+  color: inherit;
+}
+
+nav ul li.nav-link-right a {
+  text-decoration: none;
+  color: inherit;
+}
+
+nav ul li.nav-link-right a:hover {
+  color: #e99f30;
+}
+
+.navbar-wrapper {
+  height: var(--nav-size);
+  padding: 0 1rem;
+  background-color: #4b4545;
+  border-bottom: 1px solid#e99f30;
+  color: white;
+}
+
+.navbar-nav-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-right {
+  font-size: 25px;
+  margin: 10px;
+}
+
+.nav-title {
+  font-size: 35px;
+  font-family: "NovaRound-Regular";
+  padding: 0 10px;
+  flex: 1;
+}
+
+.drop-hamburger {
+  background-color: #4b4545;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: absolute;
+  top: 70px;
+  width: 200px;
+  border: 4px solid #e99f30;
+  box-shadow: 0 1px 2px 1px #dedad5;
+  padding: 0.5rem 0.3rem;
+  overflow: hidden;
+  transform: translateX(-75%);
+  -webkit-transform: translateX(-75%);
+  -moz-transform: translateX(-75%);
+  -ms-transform: translateX(-75%);
+  -o-transform: translateX(-75%);
+}
+
+.menu-item {
+  height: 50px;
+  width: 100%;
+  font-size: 25px;
+  padding: 0.5rem;
+  color: inherit;
+}
+
+.menu-item:hover {
+  background-color: rgba(233, 159, 48, 0.2);
+}
+
+.nav-link-right-dropdown {
+  display: none;
+}
+
+.nav-searchbox {
+  display: flex;
+  flex: 4;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.nav-searchbox input {
+  font-size: 25px;
+  width: 70%;
+  outline: none;
+  border: none;
+  padding: 0px 0px 3px 3px;
+  height: 60%;
+}
+
+.nav-searchbox input:focus {
+  border: 2px solid;
+  border-color: #e99f30;
+}
+
+.nav-searchbox button {
+  height: 60%;
+  background-color: white;
+  border: none;
+  border-left: 2px solid black;
+  outline: none;
+  padding: 0px 25px 3px 25px;
+  font-size: 25px;
+}
+
+.nav-searchbox button:hover {
+  background-color: #e99f30;
+}
+
+@media screen and (max-width: 1281px) {
+  .nav-link-right {
+    display: none;
+  }
+  .nav-link-right-dropdown {
+    display: block;
+  }
+
+  .nav-link-right-dropdown div a.menu-item {
+    text-decoration: none;
+  }
+
+  .nav-link-right-dropdown div a.menu-item:hover {
+    color: #e99f30;
+  }
+}

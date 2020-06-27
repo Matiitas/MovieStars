@@ -7,11 +7,21 @@ const axios = require("axios");
 const omdbURL = "http://www.omdbapi.com/?apikey=";
 
 module.exports = {
-  getUsers: (req, res) => {
-    User.find()
+  /* getUsers: (req, res) => {
+    axios
+       .get(omdbURL + process.env.OMDB_KEY + "&i=" + "tt0312843" + "&plot=full") 
+      .get(omdbURL + process.env.OMDB_KEY + "&s=Pirates of the")
+      .then((response) => {
+         console.log(response.data);
+        res.json(response.data);
+      })
+      .catch((error) => {
+        res.json({ error });
+      });
+      User.find()
       .then((users) => res.json(users))
       .catch((err) => res.status(400).json("Error: " + err));
-  },
+  }, */
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
   addUser: (req, res) => {
@@ -22,8 +32,8 @@ module.exports = {
     newUser = new User({ username, email, password });
     newUser
       .save()
-      .then(() => res.json({ message: "User added succesfully" }))
-      .catch((err) => res.status(400).json("Error: " + err));
+      .then(() => res.json({ message: "User added" }))
+      .catch((err) => res.status(400).json({ error: err }));
   },
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
@@ -42,10 +52,10 @@ module.exports = {
         );
         res.json({ message: "Login correct", token });
       } else {
-        res.json({ message: "Password incorrect" });
+        res.json({ error: "Password incorrect" });
       }
     } else {
-      res.json({ message: "Email dont exist" });
+      res.json({ error: "Email dont exist" });
     }
   },
   /////////////////////////////////////////////////////////////////////
@@ -53,11 +63,11 @@ module.exports = {
   checkIfExist: async (req, res, next) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      res.json({ message: "Email taken" });
+      res.json({ error: "Email taken" });
     } else {
       user = await User.findOne({ username: req.body.username });
       if (user) {
-        res.json({ message: "Username taken" });
+        res.json({ error: "Username taken" });
       } else {
         next();
       }
@@ -67,7 +77,7 @@ module.exports = {
   ////////////////////////////////////////////////////////////////////
   validateUsername: (req, res, next) => {
     if (req.body.username.length < 4) {
-      res.json({ message: "Username short" });
+      res.json({ error: "Username short" });
     } else {
       next();
     }
@@ -76,7 +86,7 @@ module.exports = {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let validate = re.test(req.body.email);
     if (!validate) {
-      res.json({ message: "Invalid email" });
+      res.json({ error: "Invalid email" });
     } else {
       next();
     }

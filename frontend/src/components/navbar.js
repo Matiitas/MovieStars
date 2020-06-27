@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../actions/authActions";
+import star from "../assets/img/star.svg";
+import "../assets/styles/navbar.css";
+import { SlideDown } from "react-slidedown";
+import "react-slidedown/lib/slidedown.css";
 
-class NavBar extends Component {
+class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -17,54 +21,127 @@ class NavBar extends Component {
 
   authenticatedLinks() {
     return (
-      <ul
-        style={{ listStyle: "none" }}
-        className="d-flex justify-content-between"
-      >
-        <li>
-          <a href="/" onClick={this.handleLogout}>
-            Logout
-          </a>
-        </li>
-      </ul>
+      <React.Fragment>
+        <NavItem name="link-right" text="Profile"></NavItem>
+        <NavItem
+          name="link-right"
+          text="Logout"
+          to="/"
+          onClick={this.handleLogout}
+        ></NavItem>
+      </React.Fragment>
     );
   }
 
-  guestLinks() {
+  guestLinks(text) {
     return (
-      <ul
-        style={{ listStyle: "none" }}
-        className="d-flex justify-content-between"
-      >
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-        <li>
-          <Link to="/register">Register</Link>
-        </li>
-      </ul>
+      <React.Fragment>
+        {" "}
+        <NavItem name="link-right" text="Login" to="/login"></NavItem>
+        <NavItem name="link-right" text="Register" to="/register"></NavItem>
+      </React.Fragment>
     );
   }
 
   render() {
     const { isAuthenticated } = this.props.auth;
     return (
-      <nav className="navbar navbar-default">
-        <div className="row col-12">
-          <div className="col-10">
-            <Link to="/">MovieStars</Link>
-          </div>
-          <div className="col-2">
-            {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
-          </div>
-        </div>
+      <nav className="navbar-wrapper">
+        <ul className="navbar-nav-box">
+          <NavItem name="link-left" img={star} to="/"></NavItem>
+          <NavItem name="title" text="MovieStars" to="/"></NavItem>
+          <SearchBar />
+          <NavItem name="link-right" text="About"></NavItem>
+          <NavItem name="link-right" text="Contact"></NavItem>
+          {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
+          <NavItem name="link-right-dropdown" img={star}>
+            <DropdownMenu
+              isAuthenticated={isAuthenticated}
+              onClick={this.handleLogout}
+            />
+          </NavItem>
+        </ul>
       </nav>
     );
   }
 }
 
-//aca le indicamos que este componente necesita
-NavBar.propTypes = {
+function SearchBar(props) {
+  const [inputSearch, setInputSearch] = useState("");
+
+  return (
+    <li className="nav-searchbox">
+      <input type="search" placeholder="Search" />
+      <button>Search</button>
+    </li>
+  );
+}
+
+function NavItem(props) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <li className={props.name ? "nav-" + props.name : "nav-item"}>
+      <Link
+        to={props.to ? props.to : "#"}
+        onClick={props.onClick ? props.onClick : () => setOpen(!open)}
+      >
+        {props.text ? (
+          <span>{props.text}</span>
+        ) : (
+          <span>
+            <img src={props.img} alt="Star" />
+          </span>
+        )}
+      </Link>
+      {open && props.children}
+    </li>
+  );
+}
+
+function DropdownMenu(props) {
+  function DropdownItem(props) {
+    return (
+      <Link
+        to={props.to ? props.to : "#"}
+        onClick={props.onClick ? props.onClick : null}
+        className="menu-item"
+      >
+        {props.children}
+      </Link>
+    );
+  }
+
+  const isAuthenticated = (handleClick) => {
+    return (
+      <React.Fragment>
+        <DropdownItem>Profile</DropdownItem>
+        <DropdownItem onClick={handleClick} to="#">
+          Logout
+        </DropdownItem>
+      </React.Fragment>
+    );
+  };
+
+  const isGuest = () => {
+    return (
+      <React.Fragment>
+        <DropdownItem to="/login">Login</DropdownItem>
+        <DropdownItem to="/register">Register</DropdownItem>
+      </React.Fragment>
+    );
+  };
+
+  return (
+    <SlideDown className="drop-hamburger">
+      <DropdownItem>About</DropdownItem>
+      <DropdownItem>Contact</DropdownItem>
+      {props.isAuthenticated ? isAuthenticated(props.onClick) : isGuest()}
+    </SlideDown>
+  );
+}
+
+Navbar.propTypes = {
   auth: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
 };
@@ -75,7 +152,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { logout })(NavBar);
+export default connect(mapStateToProps, { logout })(Navbar);
 
 /*  Documentacion de mapStateToProps Function
 

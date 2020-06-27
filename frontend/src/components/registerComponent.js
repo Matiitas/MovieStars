@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "../assets/styles/register.css";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import axios from "axios";
 
 class Register extends Component {
@@ -35,11 +33,11 @@ class Register extends Component {
     axios
       .post("http://localhost:5000/api/v1/users/register", this.state)
       .then((response) => {
-        console.log(response.data.message);
-        if (response.data.message === "User added") {
-          this.props.history.push("/login");
+        console.log(response.data);
+        if (response.data.error) {
+          this.setState({ error: response.data.error, password: "" });
         } else {
-          this.setState({ error: response.data.message, password: "" });
+          this.props.history.push("/login");
         }
       })
       .catch((error) => console.log(error));
@@ -90,14 +88,14 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
+/* Register.propTypes = {
   auth: PropTypes.object.isRequired,
-};
+}; */
 
-function mapStateToProps(state) {
+/* function mapStateToProps(state) {
   return {
     auth: state.auth,
   };
-}
+} */
 
-export default connect(mapStateToProps, null)(Register);
+export default Register;

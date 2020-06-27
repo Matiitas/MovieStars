@@ -24,11 +24,11 @@ class Login extends Component {
     this.props
       .login(this.state)
       .then((response) => {
-        console.log("Response despues del dispatch: ", response);
-        if (response === "Login correct") {
-          this.props.history.push("/");
+        console.log(response.data);
+        if (response.data.error) {
+          this.setState({ error: response.data.error, password: "" });
         } else {
-          this.setState({ error: response, password: "" });
+          this.props.history.push("/");
         }
       })
       .catch((error) => console.log(error));
@@ -72,16 +72,9 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth,
-  };
-}
-
-export default connect(mapStateToProps, { login })(Login);
+export default connect(null, { login })(Login);
 
 // En este caso mapStateToProps es null y login seria mapDispatchToProps
 

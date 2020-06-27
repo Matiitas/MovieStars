@@ -9,9 +9,19 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/api/v1/users")
-      .then((res) => console.log(res.data))
+    axios({
+      method: "get",
+      url: "http://www.omdbapi.com/?apikey=7ef8a59d" + "&s=Pirates of the",
+      transformRequest: [
+        (data, headers) => {
+          delete headers.common.Authorization;
+          return data;
+        },
+      ],
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
       .catch((err) => {
         console.log(err);
       });

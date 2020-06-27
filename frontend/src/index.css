@@ -6,6 +6,16 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: "NovaRound-Regular";
+  src: url("./assets/fonts/NovaRound-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Comfortaa-VariableFont_wght.ttf";
+  src: url("./assets/fonts/Comfortaa-VariableFont_wght.ttf");
+}
+
 html {
   height: 100%;
 }
@@ -20,12 +30,15 @@ body {
 }
 
 #root {
+  --nav-size: 70px;
   height: 100%;
-  background: #b2a5b4;
-  background: -webkit-linear-gradient(0.5turn, #796261, #ffffff);
-  background: -o-linear-gradient(0.5turn, #796261, #ffffff);
-  background: -moz-linear-gradient(0.5turn, #796261, #ffffff);
-  background: linear-gradient(0.5turn, #796261, #ffffff);
+  background: black;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 code {

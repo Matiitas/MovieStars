@@ -12,7 +12,7 @@ const {
   deleteMovie,
 } = require("../controllers/usersController");
 
-router.route("/").get(auth, getUsers);
+/* router.route("/").get(auth, getUsers); */
 
 router
   .route("/register")
