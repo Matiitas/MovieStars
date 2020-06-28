@@ -13,7 +13,10 @@ nav ul li.nav-link-right a:hover {
 }
 
 .navbar-wrapper {
+  position: fixed;
   height: var(--nav-size);
+  z-index: 1;
+  width: 100%;
   padding: 0 1rem;
   background-color: #4b4545;
   border-bottom: 1px solid#e99f30;
@@ -28,18 +31,24 @@ nav ul li.nav-link-right a:hover {
 }
 
 .nav-link-right {
-  font-size: 25px;
+  font-size: 23px;
+  padding-top: 2px;
   margin: 10px;
+  font-family: "Comfortaa-Regular";
 }
 
 .nav-title {
   font-size: 35px;
-  font-family: "NovaRound-Regular";
   padding: 0 10px;
   flex: 1;
 }
 
+.nav-title a span {
+  font-family: "NovaRound-Regular";
+}
+
 .drop-hamburger {
+  font-family: "Comfortaa-Regular";
   background-color: #4b4545;
   display: flex;
   flex-direction: column;
@@ -75,6 +84,7 @@ nav ul li.nav-link-right a:hover {
 }
 
 .nav-searchbox {
+  font-family: "Comfortaa-Regular";
   display: flex;
   flex: 4;
   height: 100%;
@@ -82,12 +92,20 @@ nav ul li.nav-link-right a:hover {
   align-items: center;
 }
 
+.nav-searchbox form {
+  width: 100%;
+  height: 100%;
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
 .nav-searchbox input {
   font-size: 25px;
-  width: 70%;
+  width: 65%;
   outline: none;
   border: none;
-  padding: 0px 0px 3px 3px;
+  padding: 7px 0px 0px 6px;
   height: 60%;
 }
 
@@ -97,12 +115,13 @@ nav ul li.nav-link-right a:hover {
 }
 
 .nav-searchbox button {
+  position: relative;
   height: 60%;
   background-color: white;
   border: none;
   border-left: 2px solid black;
   outline: none;
-  padding: 0px 25px 3px 25px;
+  padding: 4px 25px 3px 25px;
   font-size: 25px;
 }
 
@@ -110,7 +129,7 @@ nav ul li.nav-link-right a:hover {
   background-color: #e99f30;
 }
 
-@media screen and (max-width: 1281px) {
+@media screen and (max-width: 1181px) {
   .nav-link-right {
     display: none;
   }

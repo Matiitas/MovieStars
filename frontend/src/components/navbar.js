@@ -50,7 +50,7 @@ class Navbar extends Component {
         <ul className="navbar-nav-box">
           <NavItem name="link-left" img={star} to="/"></NavItem>
           <NavItem name="title" text="MovieStars" to="/"></NavItem>
-          <SearchBar />
+          <SearchBar onSearch={this.props.onSearch} />
           <NavItem name="link-right" text="About"></NavItem>
           <NavItem name="link-right" text="Contact"></NavItem>
           {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
@@ -69,10 +69,24 @@ class Navbar extends Component {
 function SearchBar(props) {
   const [inputSearch, setInputSearch] = useState("");
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Este es lo que buscas: ", inputSearch);
+    props.onSearch(inputSearch);
+  };
+
   return (
     <li className="nav-searchbox">
-      <input type="search" placeholder="Search" />
-      <button>Search</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="search"
+          placeholder="Search"
+          onChange={(e) => {
+            setInputSearch(e.target.value);
+          }}
+        />
+        <button type="submit">Search</button>
+      </form>
     </li>
   );
 }

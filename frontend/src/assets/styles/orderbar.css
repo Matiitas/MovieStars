@@ -1,0 +1,44 @@
+.orderbox-wrapper {
+  position: relative;
+  display: flex;
+  top: 120px;
+  width: 100%;
+  height: auto;
+  color: white;
+  align-content: center;
+  justify-content: center;
+}
+
+.list-of-objects {
+  background-color: #4b4545;
+  width: 80%;
+  height: 100%;
+  align-items: center;
+  padding: 1px 25px 0px 25px;
+}
+
+.orderbar-list-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
+}
+
+.orderbar-title {
+  margin-right: 25px;
+  padding-top: 10px;
+}
+
+.orderbar-button {
+  width: 150px;
+  padding: 7px 5px 5px 5px;
+  margin: 12px 12px 10px 10px;
+  font-size: 20px;
+  background-color: #e99f30;
+  border: 1px solid black;
+  color: white;
+}
+
+.orderbar-button:hover {
+  background-color: rgba(233, 159, 48, 0.7);
+}
