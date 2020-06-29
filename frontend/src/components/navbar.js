@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../actions/authActions";
@@ -13,6 +13,12 @@ class Navbar extends Component {
     super(props);
     this.state = {};
   }
+
+  handleReload = (event) => {
+    event.preventDefault();
+    this.props.history.push("/");
+    window.location.reload();
+  };
 
   handleLogout = (event) => {
     event.preventDefault();
@@ -48,8 +54,18 @@ class Navbar extends Component {
     return (
       <nav className="navbar-wrapper">
         <ul className="navbar-nav-box">
-          <NavItem name="link-left" img={star} to="/"></NavItem>
-          <NavItem name="title" text="MovieStars" to="/"></NavItem>
+          <NavItem
+            name="link-left"
+            img={star}
+            to="/"
+            onClick={this.handleReload}
+          ></NavItem>
+          <NavItem
+            name="title"
+            text="MovieStars"
+            to="/"
+            onClick={this.handleReload}
+          ></NavItem>
           <SearchBar onSearch={this.props.onSearch} />
           <NavItem name="link-right" text="About"></NavItem>
           <NavItem name="link-right" text="Contact"></NavItem>
@@ -166,7 +182,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout })(withRouter(Navbar));
 
 /*  Documentacion de mapStateToProps Function
 

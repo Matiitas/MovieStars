@@ -23,11 +23,10 @@
 }
 
 html {
-  height: 100%;
+  background-color: black;
 }
 
 body {
-  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Comfortaa-Regular" "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", sans-serif;
@@ -36,9 +35,8 @@ body {
 }
 
 #root {
+  background-color: black;
   --nav-size: 70px;
-  height: 100%;
-  background: black;
 }
 
 ul {

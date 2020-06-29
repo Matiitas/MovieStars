@@ -1,0 +1,99 @@
+.movies-wrapper {
+  position: relative;
+  display: flex;
+  top: 130px;
+  width: 100%;
+  height: auto;
+  color: white;
+  align-content: center;
+  justify-content: center;
+}
+
+.posters-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  background-color: #4b4545;
+  width: 80%;
+  height: 100%;
+  padding: 25px 25px;
+  border: 1px solid#e99f30;
+}
+
+.poster-container {
+  border: 1px solid#e99f30;
+  width: 300px;
+  height: 450px;
+  overflow: hidden;
+  background-color: black;
+  margin: 8px 10px;
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* background-image: url(../img/poster1.jpg); */
+}
+
+.poster-img {
+  width: 90%;
+  height: 90%;
+  /* width: 300px;
+  height: 450px; */
+}
+
+.poster-hover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(233, 159, 48, 0.7);
+  animation: appear 1s ease forwards;
+  -webkit-animation: appear 1s ease forwards;
+}
+
+.poster-leave {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(233, 159, 48, 0.7);
+  animation: disappear 1s ease forwards;
+  -webkit-animation: disappear 1s ease forwards;
+}
+
+@keyframes appear {
+  0% {
+    transform: translateY(-450px);
+    -webkit-transform: translateY(-450px);
+    -moz-transform: translateY(-450px);
+    -ms-transform: translateY(-450px);
+    -o-transform: translateY(-450px);
+  }
+  100% {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(0px);
+    -ms-transform: translateY(0px);
+    -o-transform: translateY(0px);
+  }
+}
+
+@keyframes disappear {
+  0% {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(0px);
+    -ms-transform: translateY(0px);
+    -o-transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-450px);
+    -webkit-transform: translateY(-450px);
+    -moz-transform: translateY(-450px);
+    -ms-transform: translateY(-450px);
+    -o-transform: translateY(-450px);
+  }
+}

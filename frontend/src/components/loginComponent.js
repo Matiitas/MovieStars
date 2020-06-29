@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/authActions";
 import PropTypes from "prop-types";
+import NavBar from "./navbar";
 
 class Login extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Login extends Component {
   render() {
     return (
       <div className="outter-box">
+        <NavBar></NavBar>
         <div>
           Login
           <form onSubmit={this.handleSubmit}>

@@ -7,13 +7,16 @@
   color: white;
   align-content: center;
   justify-content: center;
+  margin-bottom: 15px;
 }
 
 .list-of-objects {
   background-color: #4b4545;
+  border: 1px solid#e99f30;
   width: 80%;
   height: 100%;
   align-items: center;
+  margin-bottom: 0px;
   padding: 1px 25px 0px 25px;
 }
 
@@ -25,18 +28,21 @@
 }
 
 .orderbar-title {
+  align-self: center;
   margin-right: 25px;
-  padding-top: 10px;
+  font-size: 30px;
+  margin-bottom: 0px;
 }
 
 .orderbar-button {
   width: 150px;
   padding: 7px 5px 5px 5px;
   margin: 12px 12px 10px 10px;
-  font-size: 20px;
+  font-size: 18px;
   background-color: #e99f30;
   border: 1px solid black;
   color: white;
+  font-weight: bold;
 }
 
 .orderbar-button:hover {
