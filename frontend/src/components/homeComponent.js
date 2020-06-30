@@ -10,6 +10,7 @@ class Home extends Component {
     super(props);
     this.state = {
       movies: undefined,
+      isFetching: true,
     };
   }
 
@@ -27,9 +28,9 @@ class Home extends Component {
       .then((response) => {
         console.log("Esta es la respuesta de la busqueda: ", response.data);
         if (response !== undefined) {
-          this.setState({ movies: response.data.Search });
+          this.setState({ movies: response.data.Search, isFetching: false });
         } else {
-          this.setState({ movies: [] });
+          this.setState({ isFetching: false });
         }
         console.log("movies state: ", this.state.movies);
       })
@@ -39,32 +40,14 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    const fetchData = async () => {
-      try {
-        const promises = await getMoviesWithWord("Harry");
-        if (promises === undefined) {
-          return;
-        } else {
-          const result = [];
-          Promise.all(promises)
-            .then((movies) => {
-              movies.forEach((movie) => {
-                if (movie.status === 200) {
-                  result.push(movie.data);
-                }
-              });
-              console.log("Antes de hacer el setState: ", result);
-              this.setState({ movies: result });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      } catch (e) {
-        console.log("Not Found", e);
-      }
-    };
-    fetchData();
+    getMoviesWithWord("Harry")
+      .then((result) => {
+        this.setState({ movies: result, isFetching: false });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ isFetching: false });
+      });
   }
 
   render() {
@@ -72,7 +55,11 @@ class Home extends Component {
       <div style={{ display: "block", height: "100vh" }}>
         <NavBar onSearch={this.handleSearch} />
         <OrderBar />
-        <MoviesContainer movies={this.state.movies} />
+        {this.state.isFetching ? (
+          <h1 style={{ color: "white" }}>Loading Movies</h1>
+        ) : (
+          <MoviesContainer movies={this.state.movies} />
+        )}
       </div>
     );
   }

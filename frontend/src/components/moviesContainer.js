@@ -2,27 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../assets/styles/moviesContainer.css";
 
 function MoviesContainer(props) {
-  const [needRender, setneedRender] = useState(false);
-  /* const renderMovies = () => {
-    props.movies.map((movie) => {
-      return <Poster img={movie.poster} />;
-    });
-  }; */
-
-  useEffect(() => {
-    if (props.movies !== undefined) {
-      console.log("Use effect", props.movies.length);
-      setneedRender(true);
-    } else {
-      console.log("Use effect part else");
-    }
-  }, [props.movies]);
-
   return (
     <div className="movies-wrapper">
       <div className="posters-wrapper">
         {console.log("estas son las props en movies container: ", props.movies)}
-        {needRender ? (
+        {props.movies !== undefined ? (
           props.movies.map((movie) => {
             return (
               <Poster
