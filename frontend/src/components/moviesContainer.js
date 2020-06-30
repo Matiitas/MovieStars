@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/styles/moviesContainer.css";
 
 function MoviesContainer(props) {
+  const [needRender, setneedRender] = useState(false);
   /* const renderMovies = () => {
     props.movies.map((movie) => {
       return <Poster img={movie.poster} />;
     });
   }; */
 
+  useEffect(() => {
+    if (props.movies !== undefined) {
+      console.log("Use effect", props.movies.length);
+      setneedRender(true);
+    } else {
+      console.log("Use effect part else");
+    }
+  }, [props.movies]);
+
   return (
     <div className="movies-wrapper">
       <div className="posters-wrapper">
-        {props.movies !== undefined ? (
+        {console.log("estas son las props en movies container: ", props.movies)}
+        {needRender ? (
           props.movies.map((movie) => {
             return (
               <Poster
@@ -19,20 +30,12 @@ function MoviesContainer(props) {
                 key={movie.imdbID}
                 img={movie.Poster}
                 title={movie.Title}
-              >
-                {/* <HoverPoster title={movie.Title} />
-                <LeavePoster title={movie.Title} /> */}
-              </Poster>
+              />
             );
           })
         ) : (
           <h1>No results found</h1>
         )}
-        {/* {renderMovies} */}
-        {/* <Poster />
-        <Poster />
-        <Poster />
-        <Poster /> */}
       </div>
     </div>
   );
