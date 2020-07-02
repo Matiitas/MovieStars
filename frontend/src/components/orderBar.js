@@ -7,9 +7,31 @@ function OrderBar(props) {
       <ul className="list-of-objects">
         <li className="orderbar-list-buttons">
           <h1 className="orderbar-title">Order by</h1>
-          <OrderBarButton text="A-Z" />
-          <OrderBarButton text="Release Date" />
-          <OrderBarButton text="IMDB Rating" />
+          <OrderBarButton
+            onClick={props.onClick}
+            text="A-Z"
+            order="alphabetic"
+          />
+          <OrderBarButton
+            onClick={props.onClick}
+            text="Year ↑"
+            order="yearAsc"
+          />
+          <OrderBarButton
+            onClick={props.onClick}
+            text="Year ↓"
+            order="yearDesc"
+          />
+          <OrderBarButton
+            onClick={props.onClick}
+            text="IMDB ↑"
+            order="imdbRatingAsc"
+          />
+          <OrderBarButton
+            onClick={props.onClick}
+            text="IMDB ↓"
+            order="imdbRatingDesc"
+          />
         </li>
       </ul>
     </div>
@@ -17,7 +39,15 @@ function OrderBar(props) {
 }
 
 function OrderBarButton(props) {
-  return <button className="orderbar-button">{props.text}</button>;
+  const handleClick = () => {
+    props.onClick(props.order);
+  };
+
+  return (
+    <button className="orderbar-button" onClick={handleClick}>
+      {props.text}
+    </button>
+  );
 }
 
 export default OrderBar;

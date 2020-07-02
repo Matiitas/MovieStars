@@ -38,7 +38,6 @@ class Login extends Component {
   render() {
     return (
       <div className="outter-box">
-        <NavBar></NavBar>
         <div>
           Login
           <form onSubmit={this.handleSubmit}>

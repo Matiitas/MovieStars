@@ -16,13 +16,20 @@ class Navbar extends Component {
 
   handleReload = (event) => {
     event.preventDefault();
-    this.props.history.push("/");
-    window.location.reload();
+    if (this.props.history.location.pathname === "/") {
+      window.location.reload();
+    } else {
+      this.props.history.push("/");
+    }
   };
 
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
+  };
+
+  handleSearch = (inputSearch) => {
+    this.props.history.push("/search/" + inputSearch);
   };
 
   authenticatedLinks() {
@@ -39,7 +46,7 @@ class Navbar extends Component {
     );
   }
 
-  guestLinks(text) {
+  guestLinks() {
     return (
       <React.Fragment>
         {" "}
@@ -66,7 +73,7 @@ class Navbar extends Component {
             to="/"
             onClick={this.handleReload}
           ></NavItem>
-          <SearchBar onSearch={this.props.onSearch} />
+          <SearchBar onSearch={this.handleSearch} />
           <NavItem name="link-right" text="About"></NavItem>
           <NavItem name="link-right" text="Contact"></NavItem>
           {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
