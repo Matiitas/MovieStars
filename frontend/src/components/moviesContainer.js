@@ -166,26 +166,30 @@ function Poster(props) {
 
 function PosterInfo(props) {
   return (
-    <ul>
-      <li>
-        <h5>{props.movie.Title}</h5>
+    <ul className="list-of-details">
+      <li className="text-center">
+        <h4 className="font-weight-bold">{props.movie.Title}</h4>
       </li>
-      <li>
-        <button onClick={() => props.onClick(props.movie.imdbID)}>
+      <li className="justify-content-center pb-3">
+        <button
+          className="button-view-detail"
+          onClick={() => props.onClick(props.movie.imdbID)}
+        >
           View Details
         </button>
       </li>
       <li>
-        <h6>Duration: {props.movie.Runtime}</h6>
+        <h5>Duration:</h5>
+        {props.movie.Runtime ? <h6>{props.movie.Runtime}</h6> : <h6> N/A</h6>}
       </li>
       <li>
-        <h6>Year: {props.movie.Year}</h6>
+        <h5>Year:</h5>{" "}
+        {props.movie.Year ? <h6>{props.movie.Year}</h6> : <h6> N/A</h6>}
       </li>
+      <li>{props.movie.Plot ? <h5>{props.movie.Plot}</h5> : <h5>N/A</h5>}</li>
       <li>
-        <h6>{props.movie.Plot}</h6>
-      </li>
-      <li>
-        <h6>Genre: {props.movie.Genre}</h6>
+        <h5>Genre:</h5>
+        {props.movie.Genre ? <h6>{props.movie.Genre}</h6> : <h6>N/A</h6>}
       </li>
     </ul>
   );

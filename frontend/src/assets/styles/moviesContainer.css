@@ -42,12 +42,11 @@
 .poster-img {
   width: 90%;
   height: 90%;
-  /* width: 300px;
-  height: 450px; */
 }
 
 .poster-hover {
   position: absolute;
+  overflow-y: scroll;
   width: 100%;
   height: 100%;
   background-color: rgba(233, 159, 48, 0.7);
@@ -55,13 +54,55 @@
   -webkit-animation: appear 1s ease forwards;
 }
 
+.poster-hover::-webkit-scrollbar {
+  display: none;
+}
+
 .poster-leave {
   position: absolute;
+  overflow-y: scroll;
   width: 100%;
   height: 100%;
   background-color: rgba(233, 159, 48, 0.7);
   animation: disappear 1s ease forwards;
   -webkit-animation: disappear 1s ease forwards;
+}
+
+.poster-leave::-webkit-scrollbar {
+  display: none;
+}
+
+.list-of-details {
+  padding-top: 10px;
+  color: black;
+}
+
+.list-of-details li {
+  display: flex;
+}
+
+.list-of-details li h5 {
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.list-of-details li h6 {
+  font-size: 18px;
+}
+
+.button-view-detail {
+  background: transparent;
+  font-size: 23px;
+  font-weight: bold;
+  padding-top: 4px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 2px solid black;
+}
+
+.button-view-detail:hover {
+  background-color: white;
 }
 
 @keyframes appear {

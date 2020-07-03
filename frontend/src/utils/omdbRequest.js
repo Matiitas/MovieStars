@@ -3,7 +3,8 @@ import axios from "axios";
 const getMoviesImdbID = async (searchWord) => {
   const movies = await axios({
     method: "get",
-    url: "http://www.omdbapi.com/?apikey=7ef8a59d&s=" + searchWord,
+    url:
+      "http://www.omdbapi.com/?apikey=7ef8a59d&s=" + searchWord + "&type=movie",
     transformRequest: [
       (data, headers) => {
         delete headers.common.Authorization;
@@ -56,29 +57,34 @@ const getMoviesWithWord = (searchWord) => {
   });
 };
 
-/* const getMoviesWithWord = async (searchWord) => {
-  const movies = await getMoviesImdbID(searchWord);
-  if (movies.Response === "True") {
+const getMoviesByID = (id) => {
+  return new Promise((resolve, reject) => {
+    if (id === "" || id === undefined) {
+      reject("Error: void string");
+      return;
+    }
     const promises = [];
-    const result = [];
-    movies.Search.forEach((movie) => {
-      promises.push(
-        axios({
-          method: "get",
-          url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + movie.imdbID,
-          transformRequest: [
-            (data, headers) => {
-              delete headers.common.Authorization;
-              return data;
-            },
-          ],
-        })
-      );
-    });
-    return promises;
-  } else {
-    return undefined;
-  }
-}; */
+    promises.push(
+      axios({
+        method: "get",
+        url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + id,
+        transformRequest: [
+          (data, headers) => {
+            delete headers.common.Authorization;
+            return data;
+          },
+        ],
+      })
+    );
+    Promise.all(promises)
+      .then((res) => {
+        console.log("res en primose", res);
+        resolve(res[0]);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
 
-export { getMoviesWithWord };
+export { getMoviesWithWord, getMoviesByID };

@@ -1,0 +1,38 @@
+.global-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 130px;
+  width: 100%;
+  height: auto;
+}
+.first-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.second-row {
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.wrapper-second {
+  width: auto;
+  height: auto;
+  background-color: #4b4545;
+  padding: 25px 25px;
+  border: 1px solid#e99f30;
+  margin: 8px 10px;
+}
+
+.resumen-box {
+  border: 1px solid#e99f30;
+  height: 450px;
+  width: 800px;
+  background-color: black;
+  margin: 8px 10px;
+}
