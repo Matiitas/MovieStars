@@ -1,0 +1,53 @@
+.wrapper-popup {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.wrapper-modal-popup {
+  text-align: center;
+  position: relative;
+  display: block;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 30% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 2px solid rgb(0, 0, 0);
+  width: 30%;
+}
+
+.wrapper-modal-popup h4 {
+  padding-top: 20px;
+}
+
+.close-modal {
+  position: absolute;
+  right: 17px;
+  top: 0px;
+  width: 15px;
+  height: 15px;
+  opacity: 0.3;
+}
+.close-modal:hover {
+  opacity: 1;
+}
+.close-modal:before,
+.close-modal:after {
+  position: absolute;
+  left: 15px;
+  content: " ";
+  height: 33px;
+  width: 2px;
+  background-color: #333;
+}
+.close-modal:before {
+  transform: rotate(45deg);
+}
+.close-modal:after {
+  transform: rotate(-45deg);
+}

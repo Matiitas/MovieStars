@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
 import { getMoviesByID } from "../utils/omdbRequest";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import PopUp from "./popup";
 
 class MovieDetail extends Component {
   constructor(props) {
@@ -9,6 +12,7 @@ class MovieDetail extends Component {
     this.state = {
       movie: undefined,
       isFetching: true,
+      showPopup: false,
     };
   }
 
@@ -24,7 +28,17 @@ class MovieDetail extends Component {
       });
   }
 
+  handleClickFavorites = () => {
+    console.log("hace algo?");
+    this.setState({ showPopup: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showPopup: false });
+  };
+
   render() {
+    const message = "You need to be logged in to perform this action.";
     return (
       <div>
         <Navbar></Navbar>
@@ -34,6 +48,9 @@ class MovieDetail extends Component {
           <div className="global-wrapper">
             <div className="first-row">
               <div className="wrapper-poster">
+                {this.state.showPopup ? (
+                  <PopUp message={message} onClick={this.handleCloseModal} />
+                ) : null}
                 <div className="poster-container">
                   <div className="image-container">
                     <img
@@ -42,7 +59,10 @@ class MovieDetail extends Component {
                       alt={this.state.movie.Title}
                     />
                     {
-                      <button className="button-favorites">
+                      <button
+                        className="button-favorites"
+                        onClick={this.handleClickFavorites}
+                      >
                         Add to Favorites
                       </button>
                     }
@@ -164,4 +184,14 @@ function renderListResumen(movie) {
   );
 }
 
-export default MovieDetail;
+MovieDetail.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(MovieDetail);
