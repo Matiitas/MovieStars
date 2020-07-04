@@ -29,7 +29,11 @@ class Navbar extends Component {
   };
 
   handleSearch = (inputSearch) => {
-    this.props.history.push("/search/" + inputSearch);
+    if (inputSearch === "" || inputSearch === undefined) {
+      console.log("Search input void");
+    } else {
+      this.props.history.push("/search/" + inputSearch);
+    }
   };
 
   authenticatedLinks() {
@@ -102,6 +106,7 @@ function SearchBar(props) {
     <li className="nav-searchbox">
       <form onSubmit={handleSubmit}>
         <input
+          required
           type="search"
           placeholder="Search"
           onChange={(e) => {

@@ -33,7 +33,7 @@ class MovieDetail extends Component {
         ) : (
           <div className="global-wrapper">
             <div className="first-row">
-              <div className="wrapper-second">
+              <div className="wrapper-poster">
                 <div className="poster-container">
                   <div className="image-container">
                     <img
@@ -41,24 +41,127 @@ class MovieDetail extends Component {
                       src={this.state.movie.Poster}
                       alt={this.state.movie.Title}
                     />
+                    {
+                      <button className="button-favorites">
+                        Add to Favorites
+                      </button>
+                    }
                   </div>
                 </div>
               </div>
-              <div className="wrapper-second">
+              <div className="wrapper-resumen">
                 <div className="resumen-box">
-                  <h1>ASKDPASKDPKASPDASDKA</h1>
+                  {renderListResumen(this.state.movie)}
                 </div>
               </div>
             </div>
             <div className="second-row">
-              <div className="wrapper-second"></div>
-              <div className="wrapper-second"></div>
+              <div className="wrapper-second">
+                {renderListMoreInfo(this.state.movie)}
+              </div>
             </div>
           </div>
         )}
       </div>
     );
   }
+}
+
+function renderListMoreInfo(movie) {
+  return (
+    <ul className="movie-details-list">
+      <li>
+        <h5>Plot:</h5>
+        <h6> {movie.Plot ? movie.Plot : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Writer:</h5>
+
+        <h6> {movie.Writer ? movie.Writer : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Production:</h5>
+
+        <h6> {movie.Production ? movie.Production : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Language:</h5>
+
+        <h6> {movie.Language ? movie.Language : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Rated:</h5>
+        <h6> {movie.Rated ? movie.Rated : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Awards:</h5>
+        <h6> {movie.Awards ? movie.Awards : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>IMDB:</h5>
+        <h6> {movie.imdbRating ? movie.imdbRating : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Rotten Tomatoes:</h5>
+        <h6> {movie.Ratings[1] ? movie.Ratings[1].Value : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Metacritic:</h5>
+        <h6> {movie.Metascore ? movie.Metascore : "N/A"}</h6>
+      </li>
+    </ul>
+  );
+}
+
+function renderListResumen(movie) {
+  return (
+    <ul className="movie-details-list">
+      <li className="justify-content-center">
+        <h3 className="font-weight-bold">{movie.Title}</h3>
+      </li>
+      <li>
+        <h5>Year:</h5>
+        <h6> {movie.Year ? movie.Year : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Duration:</h5>
+
+        <h6> {movie.Runtime ? movie.Runtime : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Genre:</h5>
+
+        <h6> {movie.Genre ? movie.Genre : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Director:</h5>
+
+        <h6> {movie.Director ? movie.Director : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Actors:</h5>
+        <h6> {movie.Actors ? movie.Actors : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>Country:</h5>
+
+        <h6> {movie.Country ? movie.Country : "N/A"}</h6>
+      </li>
+      <li>
+        <h5>IMDB:</h5>
+        {movie.imdbID ? (
+          <a
+            target="_blank"
+            href={"https://www.imdb.com/title/" + movie.imdbID}
+          >
+            <h5>{movie.imdbID}</h5>
+          </a>
+        ) : (
+          "N/A"
+        )}
+      </li>
+    </ul>
+  );
 }
 
 export default MovieDetail;

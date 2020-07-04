@@ -67,7 +67,7 @@ const getMoviesByID = (id) => {
     promises.push(
       axios({
         method: "get",
-        url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + id,
+        url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + id + "&plot=full",
         transformRequest: [
           (data, headers) => {
             delete headers.common.Authorization;

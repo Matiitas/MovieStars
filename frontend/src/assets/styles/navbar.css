@@ -119,7 +119,7 @@ nav ul li.nav-link-right a:hover {
 .nav-searchbox button {
   position: relative;
   height: 60%;
-  color: white;
+  color: black;
   background-color: #e99f30;
   border: none;
   border-left: 2px solid black;
