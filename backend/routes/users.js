@@ -8,8 +8,9 @@ const {
   validateUsername,
   validateEmail,
   addMovie,
-  getMovies,
+  getMoviesDetails,
   deleteMovie,
+  getFavoriteMoviesId,
 } = require("../controllers/usersController");
 
 /* router.route("/").get(auth, getUsers); */
@@ -21,12 +22,15 @@ router
 router.route("/login").post(validateEmail, loginUser);
 
 //Agrega una movie al usuario
-router.route("/movies").post(addMovie);
+router.route("/movies").post(auth, addMovie);
 
 //Devuelve todas las movies del usuario
-router.route("/movies").get(getMovies);
+router.route("/movies").get(auth, getFavoriteMoviesId);
+
+//Devuelve los detalles de todas las movies favoritas del user
+router.route("/profile/movies").get(auth, getMoviesDetails);
 
 //Borra una movie favorita del usuario
-router.route("/movies").delete(deleteMovie);
+router.route("/movies").delete(auth, deleteMovie);
 
 module.exports = router;

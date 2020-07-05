@@ -9,7 +9,7 @@ const PopUp = (props) => {
   return (
     <div className="wrapper-popup">
       <div className="wrapper-modal-popup">
-        <a href="#" className="close-modal" onClick={handleClose}></a>
+        <span className="close-modal" onClick={handleClose}></span>
         <h4>{props.message}</h4>
       </div>
     </div>

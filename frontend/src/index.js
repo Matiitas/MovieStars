@@ -11,7 +11,6 @@ import setAuthorizationToken from "./utils/setAuthorizationToken";
 import rootReducer from "./rootReducer";
 import jwt from "jsonwebtoken";
 import { setCurrentUser } from "./actions/authActions";
-import "bootstrap";
 
 const store = createStore(
   rootReducer,

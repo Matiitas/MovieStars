@@ -39,7 +39,7 @@ class Navbar extends Component {
   authenticatedLinks() {
     return (
       <React.Fragment>
-        <NavItem name="link-right" text="Profile"></NavItem>
+        <NavItem name="link-right" text="Profile" to="/profile"></NavItem>
         <NavItem
           name="link-right"
           text="Logout"
@@ -78,8 +78,8 @@ class Navbar extends Component {
             onClick={this.handleReload}
           ></NavItem>
           <SearchBar onSearch={this.handleSearch} />
-          <NavItem name="link-right" text="About"></NavItem>
-          <NavItem name="link-right" text="Contact"></NavItem>
+          <NavItem name="link-right" text="About" to="/about"></NavItem>
+          <NavItem name="link-right" text="Contact" to="/contact"></NavItem>
           {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
           <NavItem name="link-right-dropdown" img={star}>
             <DropdownMenu
@@ -157,7 +157,7 @@ function DropdownMenu(props) {
   const isAuthenticated = (handleClick) => {
     return (
       <React.Fragment>
-        <DropdownItem>Profile</DropdownItem>
+        <DropdownItem to="/profile">Profile</DropdownItem>
         <DropdownItem onClick={handleClick} to="#">
           Logout
         </DropdownItem>
@@ -176,8 +176,8 @@ function DropdownMenu(props) {
 
   return (
     <SlideDown className="drop-hamburger">
-      <DropdownItem>About</DropdownItem>
-      <DropdownItem>Contact</DropdownItem>
+      <DropdownItem to="/about">About</DropdownItem>
+      <DropdownItem to="/contact">Contact</DropdownItem>
       {props.isAuthenticated ? isAuthenticated(props.onClick) : isGuest()}
     </SlideDown>
   );

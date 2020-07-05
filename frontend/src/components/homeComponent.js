@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import NavBar from "./navbar";
 import MoviesContainer from "./moviesContainer";
 import "../assets/styles/home.css";
-import { getMoviesByID } from "../utils/omdbRequest";
 
 class Home extends Component {
   constructor(props) {

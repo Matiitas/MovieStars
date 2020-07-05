@@ -95,9 +95,11 @@ module.exports = {
   ////////////////////////////////////////////////////////////////////
   //si la movie ya esta en los favoritos del usuario no se agrega
   addMovie: (req, res) => {
+    console.log("req.query: ", req.query);
+    console.log("req.param:", req.params);
     User.updateOne(
       { _id: req.userId },
-      { $addToSet: { movies: req.query.movieId } }
+      { $addToSet: { movies: req.query.movieID } }
     )
       .then((result) => {
         console.log("Se agrego la movie", result);
@@ -116,14 +118,25 @@ module.exports = {
           "IdDeLaMovie",
           "IdDeLaMovie2"
         ] */
-  getMovies: async (req, res) => {
-    user = await User.findById({ _id: req.body.id });
+
+  getFavoriteMoviesId: async (req, res) => {
+    user = await User.findById({ _id: req.userId });
+    if (user) {
+      res.json({ movies: user.movies });
+    } else {
+      res.status(404).json("User not found");
+    }
+  },
+  getMoviesDetails: async (req, res) => {
+    user = await User.findById({ _id: req.userId });
     if (user) {
       var promises = [];
       var result = [];
       user.movies.forEach((movieId) => {
         promises.push(
-          axios.get(omdbURL + process.env.OMDB_KEY + "&i=" + movieId)
+          axios.get(
+            omdbURL + process.env.OMDB_KEY + "&i=" + movieId + "&plot=full"
+          )
         );
       });
       Promise.all(promises)
@@ -148,11 +161,11 @@ module.exports = {
   deleteMovie: (req, res) => {
     User.updateOne(
       { _id: req.userId },
-      { $pullAll: { movies: [req.query.movieId] } }
+      { $pullAll: { movies: [req.query.movieID] } }
     )
       .then((result) => {
         console.log("Este es el resultado si lo encontro: ", result);
-        res.json(result);
+        res.json({ message: "Removed" });
       })
       .catch((err) => {
         console.log("Error", err);

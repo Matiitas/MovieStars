@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
 import { getMoviesByID } from "../utils/omdbRequest";
+import {
+  getFavoriteMovies,
+  addToFavorites,
+  deleteFromFavorites,
+} from "../utils/backendRequest";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import PopUp from "./popup";
@@ -13,11 +18,25 @@ class MovieDetail extends Component {
       movie: undefined,
       isFetching: true,
       showPopup: false,
+      alreadyFavorite: false,
     };
   }
 
   componentDidMount() {
+    const { isAuthenticated } = this.props.auth;
     const { imdbID } = this.props.match.params;
+    if (isAuthenticated) {
+      getFavoriteMovies()
+        .then((response) => {
+          if (response.data.movies.includes(imdbID)) {
+            this.setState({ alreadyFavorite: true });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     getMoviesByID(imdbID)
       .then((res) => {
         console.log("Esta es la res", res);
@@ -29,8 +48,37 @@ class MovieDetail extends Component {
   }
 
   handleClickFavorites = () => {
-    console.log("hace algo?");
-    this.setState({ showPopup: true });
+    const { imdbID } = this.props.match.params;
+    const { isAuthenticated } = this.props.auth;
+    if (isAuthenticated) {
+      addToFavorites(imdbID)
+        .then((response) => {
+          console.log("Esta es la respuesta: ", response.data);
+          this.setState({ alreadyFavorite: true });
+        })
+        .catch((err) => {
+          console.log("Error: ", err);
+        });
+    } else {
+      this.setState({ showPopup: true });
+    }
+  };
+
+  handleDeleteFavorite = () => {
+    const { imdbID } = this.props.match.params;
+    const { isAuthenticated } = this.props.auth;
+    if (isAuthenticated) {
+      deleteFromFavorites(imdbID)
+        .then((response) => {
+          console.log("Esta es la respuesta: ", response.data.message);
+          this.setState({ alreadyFavorite: false });
+        })
+        .catch((err) => {
+          console.log("Error: ", err);
+        });
+    } else {
+      console.log("No esta logueado ameo");
+    }
   };
 
   handleCloseModal = () => {
@@ -38,6 +86,7 @@ class MovieDetail extends Component {
   };
 
   render() {
+    const { isAuthenticated } = this.props.auth;
     const message = "You need to be logged in to perform this action.";
     return (
       <div>
@@ -58,14 +107,21 @@ class MovieDetail extends Component {
                       src={this.state.movie.Poster}
                       alt={this.state.movie.Title}
                     />
-                    {
+                    {this.state.alreadyFavorite && isAuthenticated ? (
+                      <button
+                        className="button-favorites"
+                        onClick={this.handleDeleteFavorite}
+                      >
+                        Remove from Favorites
+                      </button>
+                    ) : (
                       <button
                         className="button-favorites"
                         onClick={this.handleClickFavorites}
                       >
                         Add to Favorites
                       </button>
-                    }
+                    )}
                   </div>
                 </div>
               </div>
@@ -172,6 +228,7 @@ function renderListResumen(movie) {
         {movie.imdbID ? (
           <a
             target="_blank"
+            rel="noopener noreferrer"
             href={"https://www.imdb.com/title/" + movie.imdbID}
           >
             <h5>{movie.imdbID}</h5>

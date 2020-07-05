@@ -26,18 +26,7 @@ const getMoviesWithWord = (searchWord) => {
       const promises = [];
       const result = [];
       movies.Search.forEach((movie) => {
-        promises.push(
-          axios({
-            method: "get",
-            url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + movie.imdbID,
-            transformRequest: [
-              (data, headers) => {
-                delete headers.common.Authorization;
-                return data;
-              },
-            ],
-          })
-        );
+        promises.push(getMoviesByID(movie.imdbID, "short"));
       });
       Promise.all(promises)
         .then((movies) => {
@@ -57,33 +46,16 @@ const getMoviesWithWord = (searchWord) => {
   });
 };
 
-const getMoviesByID = (id) => {
-  return new Promise((resolve, reject) => {
-    if (id === "" || id === undefined) {
-      reject("Error: void string");
-      return;
-    }
-    const promises = [];
-    promises.push(
-      axios({
-        method: "get",
-        url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + id + "&plot=full",
-        transformRequest: [
-          (data, headers) => {
-            delete headers.common.Authorization;
-            return data;
-          },
-        ],
-      })
-    );
-    Promise.all(promises)
-      .then((res) => {
-        console.log("res en primose", res);
-        resolve(res[0]);
-      })
-      .catch((err) => {
-        reject(err);
-      });
+const getMoviesByID = (id, plot = "full") => {
+  return axios({
+    method: "get",
+    url: "http://www.omdbapi.com/?apikey=7ef8a59d&i=" + id + "&plot=" + plot,
+    transformRequest: [
+      (data, headers) => {
+        delete headers.common.Authorization;
+        return data;
+      },
+    ],
   });
 };
 
