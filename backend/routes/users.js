@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const auth = require("../controllers/authenticateWithToken");
 const {
-  getUsers,
+  getUser,
   addUser,
   loginUser,
   checkIfExist,
@@ -20,6 +20,8 @@ router
   .post(validateEmail, validateUsername, checkIfExist, addUser);
 
 router.route("/login").post(validateEmail, loginUser);
+
+router.route("/me").get(auth, getUser);
 
 //Agrega una movie al usuario
 router.route("/movies").post(auth, addMovie);

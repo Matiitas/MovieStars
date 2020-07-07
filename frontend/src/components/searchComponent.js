@@ -21,6 +21,12 @@ class Search extends Component {
       <div>
         <NavBar />
         <OrderBar onClick={this.handleOrder} />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <MoviesContainer searchWord={searchWord} order={this.state.order} />
       </div>
     );

@@ -7,23 +7,6 @@ const axios = require("axios");
 const omdbURL = "http://www.omdbapi.com/?apikey=";
 
 module.exports = {
-  /* getUsers: (req, res) => {
-    axios
-       .get(omdbURL + process.env.OMDB_KEY + "&i=" + "tt0312843" + "&plot=full") 
-      .get(omdbURL + process.env.OMDB_KEY + "&s=Pirates of the")
-      .then((response) => {
-         console.log(response.data);
-        res.json(response.data);
-      })
-      .catch((error) => {
-        res.json({ error });
-      });
-      User.find()
-      .then((users) => res.json(users))
-      .catch((err) => res.status(400).json("Error: " + err));
-  }, */
-  /////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////
   addUser: (req, res) => {
     console.log(req.body);
     const username = req.body.username;
@@ -93,10 +76,24 @@ module.exports = {
   },
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
+
+  getUser: (req, res) => {
+    User.findById(req.userId)
+      .then((response) => {
+        const user = {
+          movies: response.movies,
+          username: response.username,
+          email: response.email,
+        };
+        res.json(user);
+      })
+      .catch((err) => {
+        res.status(404).json(err);
+      });
+  },
+
   //si la movie ya esta en los favoritos del usuario no se agrega
   addMovie: (req, res) => {
-    console.log("req.query: ", req.query);
-    console.log("req.param:", req.params);
     User.updateOne(
       { _id: req.userId },
       { $addToSet: { movies: req.query.movieID } }

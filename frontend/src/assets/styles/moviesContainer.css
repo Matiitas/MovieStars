@@ -1,12 +1,12 @@
 .movies-wrapper {
   position: relative;
   display: flex;
-  top: 130px;
   width: 100%;
   height: auto;
   color: white;
   align-content: center;
   justify-content: center;
+  margin-bottom: 5rem;
 }
 
 .posters-wrapper {

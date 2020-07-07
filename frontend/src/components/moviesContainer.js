@@ -13,14 +13,18 @@ class MoviesContainer extends Component {
   }
 
   componentDidMount() {
-    console.log("entro al didmount");
-    getMoviesWithWord(this.props.searchWord)
-      .then((result) => {
-        this.setState({ movies: result, isFetching: false });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    console.log("Didmoount de moviesContainer", this.props.movies);
+    if (this.props.movies) {
+      this.setState({ movies: this.props.movies, isFetching: false });
+    } else {
+      getMoviesWithWord(this.props.searchWord)
+        .then((result) => {
+          this.setState({ movies: result, isFetching: false });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   componentDidUpdate(prevProps) {

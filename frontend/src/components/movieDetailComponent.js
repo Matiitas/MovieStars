@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
-import { getMoviesByID } from "../utils/omdbRequest";
+import { getMovieByID } from "../utils/omdbRequest";
 import {
   getFavoriteMovies,
   addToFavorites,
@@ -37,7 +37,7 @@ class MovieDetail extends Component {
         });
     }
 
-    getMoviesByID(imdbID)
+    getMovieByID(imdbID)
       .then((res) => {
         console.log("Esta es la res", res);
         this.setState({ movie: res.data, isFetching: false });
