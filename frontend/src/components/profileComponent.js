@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./navbar";
+import { Link } from "react-router-dom";
 import "../assets/styles/profile.css";
-import imageProfile from "../assets/img/profile.png";
 import MoviesContainer from "./moviesContainer";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -20,12 +20,17 @@ class Profile extends Component {
   }
 
   async componentDidMount() {
+    console.log(
+      "Date today",
+      new Date(Date.now()).toLocaleString() /* .split(" ")[0] */
+    );
     try {
       const { userId } = this.props.match.params;
       if (!userId) {
         const user = await axios.get("http://localhost:5000/api/v1/users/me");
         if (user) {
           this.setState({ user: user.data });
+          console.log("state", user.data);
           getMoviesByArrayOfID(user.data.movies)
             .then((response) => {
               this.setState({
@@ -41,8 +46,8 @@ class Profile extends Component {
       } else {
         //hago algo si entra un guest
       }
-    } catch {
-      console.log("Algo paso en el try que no se pudo realizar");
+    } catch (e) {
+      console.log("Algo paso en el try que no se pudo realizar", e);
     }
   }
 
@@ -59,7 +64,9 @@ class Profile extends Component {
             <div className="profile-global-wrapper">
               <div className="profile-username-edit-button">
                 <span>{this.state.user.username} </span>
-                <button className="btn btn-primary">Edit Profile</button>
+                <Link to="/profile/edit">
+                  <button className="btn btn-primary">Edit Profile</button>
+                </Link>
               </div>
               <div className="profile-info-wrapper">
                 <table className="table table-condensed profile-table col-sm-8 mb-0">
@@ -74,18 +81,31 @@ class Profile extends Component {
                     </tr>
                     <tr>
                       <td>Name</td>
-                      <td className="col-sm-7">Matias Caballero</td>
+                      <td className="col-sm-7">{this.state.user.name}</td>
                     </tr>
                     <tr>
-                      <td>Birthday</td>
-                      <td className="col-sm-7">9 March</td>
+                      <td>Birth Date</td>
+                      <td className="col-sm-7">
+                        {this.state.user.birthDate.split("T")[0]}{" "}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Country</td>
+                      <td className="col-sm-7">{this.state.user.country} </td>
+                    </tr>
+                    <tr>
+                      <td>City</td>
+                      <td className="col-sm-7">{this.state.user.city} </td>
                     </tr>
                   </tbody>
                 </table>
                 <div className="profile-image-container">
                   <img
                     className="profile-image"
-                    src={imageProfile}
+                    src={
+                      "http://localhost:5000/uploads/" +
+                      this.state.user.profileImage
+                    }
                     alt="Profile"
                   />
                 </div>

@@ -22,6 +22,21 @@ const userSchema = new Schema(
       required: true,
     },
     movies: { type: Array, default: [] },
+    profileImage: { type: String, default: "profile.png" },
+    name: { type: String, default: "N/A" },
+    birthDate: {
+      type: Date,
+      min: "1900-01-01",
+      max: Date.now,
+    },
+    country: {
+      type: String,
+      default: "N/A",
+    },
+    city: {
+      type: String,
+      default: "N/A",
+    },
   },
   {
     timestamps: true,

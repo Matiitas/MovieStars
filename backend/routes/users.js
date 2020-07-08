@@ -11,7 +11,38 @@ const {
   getMoviesDetails,
   deleteMovie,
   getFavoriteMoviesId,
+  updateUser,
 } = require("../controllers/usersController");
+const multer = require("multer");
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb("Not a valid image", false);
+  }
+};
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 4,
+  },
+  fileFilter: fileFilter,
+});
 
 /* router.route("/").get(auth, getUsers); */
 
@@ -21,6 +52,7 @@ router
 
 router.route("/login").post(validateEmail, loginUser);
 
+//Devuelvo datos del usuario logueado
 router.route("/me").get(auth, getUser);
 
 //Agrega una movie al usuario
@@ -31,6 +63,10 @@ router.route("/movies").get(auth, getFavoriteMoviesId);
 
 //Devuelve los detalles de todas las movies favoritas del user
 router.route("/profile/movies").get(auth, getMoviesDetails);
+
+router
+  .route("/profile/edit")
+  .post(auth, upload.single("profileImage"), updateUser);
 
 //Borra una movie favorita del usuario
 router.route("/movies").delete(auth, deleteMovie);

@@ -84,6 +84,11 @@ module.exports = {
           movies: response.movies,
           username: response.username,
           email: response.email,
+          profileImage: response.profileImage,
+          name: response.name,
+          city: response.city,
+          country: response.country,
+          birthDate: response.birthDate,
         };
         res.json(user);
       })
@@ -92,6 +97,27 @@ module.exports = {
       });
   },
 
+  updateUser: (req, res) => {
+    console.log("Esta es req.file: ", req.file);
+    console.log("Este es el req.body: ", req.body);
+    User.findById({ _id: req.userId })
+      .then((user) => {
+        user.profileImage = req.file.filename;
+        user.name = req.body.name;
+        user.birthDate = req.body.birthDate;
+        user.country = req.body.country;
+        user.city = req.body.city;
+        user
+          .save()
+          .then(res.json({ message: "Update succesful" }))
+          .catch((err) => {
+            res.status(500).json(err);
+          });
+      })
+      .catch((err) => {
+        res.status(404).json(err);
+      });
+  },
   //si la movie ya esta en los favoritos del usuario no se agrega
   addMovie: (req, res) => {
     User.updateOne(

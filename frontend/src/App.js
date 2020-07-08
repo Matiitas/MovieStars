@@ -7,6 +7,7 @@ import MovieDetail from "./components/movieDetailComponent";
 import protectRoute from "./utils/protectRoutes";
 import Search from "./components/searchComponent";
 import Profile from "./components/profileComponent";
+import EditProfile from "./components/editProfileComponent";
 
 //protectRoute lleva 3 parametros, el componente a proteger,
 // el primer boolean si hay que proteger si está logueado,
@@ -22,6 +23,11 @@ function App() {
         path="/profile"
         exact
         component={protectRoute(Profile, false, true)}
+      />
+      <Route
+        path="/profile/edit"
+        exact
+        component={protectRoute(EditProfile, false, true)}
       />
       <Route
         path="/register"
