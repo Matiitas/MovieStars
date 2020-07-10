@@ -7,6 +7,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getMoviesByArrayOfID } from "../utils/omdbRequest";
+import { ImageIcon } from "@primer/octicons-react";
 
 class Profile extends Component {
   constructor(props) {
@@ -20,10 +21,6 @@ class Profile extends Component {
   }
 
   async componentDidMount() {
-    console.log(
-      "Date today",
-      new Date(Date.now()).toLocaleString() /* .split(" ")[0] */
-    );
     try {
       const { userId } = this.props.match.params;
       if (!userId) {
@@ -50,6 +47,25 @@ class Profile extends Component {
       console.log("Algo paso en el try que no se pudo realizar", e);
     }
   }
+
+  handleImageChange = (event) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append("profileImage", event.target.files[0]);
+    axios
+      .post(
+        "http://localhost:5000/api/v1/users/profile/edit-image",
+        bodyFormData
+      )
+      .then((response) => {
+        console.log("Response despues de cambiar img: ", response.data);
+        let user = this.state.user;
+        user.profileImage = response.data.newProfileImageName;
+        this.setState({ user: user });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   render() {
     return (
@@ -81,21 +97,31 @@ class Profile extends Component {
                     </tr>
                     <tr>
                       <td>Name</td>
-                      <td className="col-sm-7">{this.state.user.name}</td>
+                      <td className="col-sm-7">
+                        {this.state.user.name ? this.state.user.name : "N/A"}
+                      </td>
                     </tr>
                     <tr>
                       <td>Birth Date</td>
                       <td className="col-sm-7">
-                        {this.state.user.birthDate.split("T")[0]}{" "}
+                        {this.state.user.birthDate
+                          ? this.state.user.birthDate.split("T")[0]
+                          : "N/A"}{" "}
                       </td>
                     </tr>
                     <tr>
                       <td>Country</td>
-                      <td className="col-sm-7">{this.state.user.country} </td>
+                      <td className="col-sm-7">
+                        {this.state.user.country
+                          ? this.state.user.country
+                          : "N/A"}{" "}
+                      </td>
                     </tr>
                     <tr>
                       <td>City</td>
-                      <td className="col-sm-7">{this.state.user.city} </td>
+                      <td className="col-sm-7">
+                        {this.state.user.city ? this.state.user.city : "N/A"}{" "}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -108,6 +134,16 @@ class Profile extends Component {
                     }
                     alt="Profile"
                   />
+                  <label className="btn btn-primary btn-sm mt-2">
+                    <ImageIcon size={24} />
+                    <input
+                      className="profile-image-input"
+                      type="file"
+                      name="profileImage"
+                      onChange={this.handleImageChange}
+                    />
+                    Profile Image
+                  </label>
                 </div>
               </div>
               {this.state.movies ? (

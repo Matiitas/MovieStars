@@ -6,14 +6,18 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dateType: "text",
       user: undefined,
       isFetching: true,
       name: "",
       birthDate: "",
       country: "",
       city: "",
-      profileImage: "",
+      errors: {
+        name: false,
+        city: false,
+        country: false,
+        birthDate: false,
+      },
     };
   }
 
@@ -27,7 +31,6 @@ class EditProfile extends Component {
           birthDate: this.state.user.birthDate,
           country: this.state.user.country,
           city: this.state.user.city,
-          profileImage: this.state.user.profileImage,
         });
       })
       .catch((err) => {
@@ -47,37 +50,70 @@ class EditProfile extends Component {
   handleCityChange = (event) => {
     this.setState({ city: event.target.value });
   };
-  handleImageChange = (event) => {
-    this.setState({ profileImage: event.target.files[0] });
+
+  validateInputs = (input) => {
+    if (input === "" || input === undefined) {
+      return true;
+    } else {
+      const pattern = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
+      return pattern.test(input);
+    }
   };
+
   handleSubmit = (event) => {
     event.preventDefault();
+    let name = this.state.name;
+    let city = this.state.city;
+    let country = this.state.country;
+    let birthDate = this.state.birthDate;
+
+    const errors = this.state.errors;
+
+    const validName = this.validateInputs(name);
+    const validCity = this.validateInputs(city);
+    const validCountry = this.validateInputs(country);
+
+    const formInputs = {};
+
+    console.log("valid name: ", validName);
+
+    if (validName) {
+      formInputs.name = name;
+      errors.name = false;
+    } else {
+      errors.name = true;
+    }
+    if (validCity) {
+      formInputs.city = city;
+      errors.city = false;
+    } else {
+      errors.city = true;
+    }
+    if (validCountry) {
+      formInputs.country = country;
+      errors.country = false;
+    } else {
+      errors.country = true;
+    }
+
+    formInputs.birthDate = birthDate;
+    this.setState({ errors: errors });
+
     console.log("State", this.state);
 
-    const bodyFormData = new FormData();
-    bodyFormData.append("profileImage", this.state.profileImage);
-    bodyFormData.append("name", this.state.name);
-    bodyFormData.append("country", this.state.country);
-    bodyFormData.append("city", this.state.city);
-    bodyFormData.append("birthDate", this.state.birthDate);
-
-    axios
-      .post("http://localhost:5000/api/v1/users/profile/edit", bodyFormData)
-      .then((response) => {
-        console.log(response);
-        this.props.history.push("/profile");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  handleFocus = () => {
-    this.setState({ dateType: "date" });
-  };
-
-  handleBlur = () => {
-    this.setState({ dateType: "text" });
+    if (!validName || !validCity || !validCountry) {
+      console.log("Input invalido");
+    } else {
+      axios
+        .post("http://localhost:5000/api/v1/users/profile/edit", formInputs)
+        .then((response) => {
+          console.log(response);
+          this.props.history.push("/profile");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   render() {
@@ -106,21 +142,29 @@ class EditProfile extends Component {
               <div className="form-group row">
                 <label>Name</label>
                 <input
+                  /* className="form-control is-invalid" */
+                  maxLength="32"
                   type="text"
                   onChange={this.handleNameChange}
-                  placeholder={
-                    this.state.user.name ? this.state.user.name : "Name"
-                  }
+                  value={this.state.name ? this.state.name : ""}
+                  placeholder="Name"
                 />
+                {/* <div className="invalid-feedback">
+                  Please provide a valid city.
+                </div> */}
               </div>
               <div className="form-group row">
                 <label>Birth Date</label>
                 <input
-                  type={this.state.dateType}
+                  min="01-01-1900"
+                  max="01-01-2030"
+                  type="date"
                   onChange={this.handleBirthChange}
-                  onFocus={this.handleFocus}
-                  onBlur={this.handleBlur}
-                  placeholder={this.state.user.birthDate.split("T")[0]}
+                  value={
+                    this.state.birthDate
+                      ? this.state.birthDate.toLocaleString().split("T")[0]
+                      : ""
+                  }
                 />
               </div>
               <div className="form-group row">
@@ -128,11 +172,8 @@ class EditProfile extends Component {
                 <input
                   type="text"
                   onChange={this.handleCountryChange}
-                  placeholder={
-                    this.state.user.country
-                      ? this.state.user.country
-                      : "Country"
-                  }
+                  value={this.state.country ? this.state.country : ""}
+                  placeholder="Country"
                 />
               </div>
               <div className="form-group row">
@@ -140,17 +181,8 @@ class EditProfile extends Component {
                 <input
                   type="text"
                   onChange={this.handleCityChange}
-                  placeholder={
-                    this.state.user.city ? this.state.user.city : "City"
-                  }
-                />
-              </div>
-              <div className="form-group row">
-                <label>Profile Image</label>
-                <input
-                  type="file"
-                  name="profileImage"
-                  onChange={this.handleImageChange}
+                  value={this.state.city ? this.state.city : ""}
+                  placeholder="City"
                 />
               </div>
               <input type="submit" value="Edit" />

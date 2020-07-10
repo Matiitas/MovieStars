@@ -1,10 +1,14 @@
 import axios from "axios";
 
-const getMoviesImdbID = async (searchWord) => {
+const getMoviesImdbID = async (searchWord, page) => {
   const movies = await axios({
     method: "get",
     url:
-      "http://www.omdbapi.com/?apikey=7ef8a59d&s=" + searchWord + "&type=movie",
+      "http://www.omdbapi.com/?apikey=7ef8a59d&s=" +
+      searchWord +
+      "&type=movie" +
+      "&page=" +
+      page,
     transformRequest: [
       (data, headers) => {
         delete headers.common.Authorization;
@@ -52,13 +56,15 @@ const getMoviesFromArrayOfTitles = (arr, plot = "short") => {
   });
 };
 
-const getMoviesWithWord = (searchWord) => {
+const getMoviesWithWord = (searchWord, page) => {
   return new Promise(async (resolve, reject) => {
     if (searchWord === "" || searchWord === undefined) {
       reject("Error: Void string");
       return;
     }
-    const movies = await getMoviesImdbID(searchWord);
+    const movies = await getMoviesImdbID(searchWord, page);
+    const cant = movies.totalResults;
+    console.log("OMDB RESPONSE: ", movies.Response);
     if (movies.Response === "True") {
       const promises = [];
       const result = [];
@@ -72,13 +78,13 @@ const getMoviesWithWord = (searchWord) => {
               result.push(movie.data);
             }
           });
-          resolve(result);
+          resolve({ result: result, cant: cant });
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      resolve(undefined);
+      reject("Error: Movies not found");
     }
   });
 };

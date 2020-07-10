@@ -12,6 +12,7 @@ const {
   deleteMovie,
   getFavoriteMoviesId,
   updateUser,
+  updateUserImage,
 } = require("../controllers/usersController");
 const multer = require("multer");
 
@@ -64,9 +65,11 @@ router.route("/movies").get(auth, getFavoriteMoviesId);
 //Devuelve los detalles de todas las movies favoritas del user
 router.route("/profile/movies").get(auth, getMoviesDetails);
 
+router.route("/profile/edit").post(auth, updateUser);
+
 router
-  .route("/profile/edit")
-  .post(auth, upload.single("profileImage"), updateUser);
+  .route("/profile/edit-image")
+  .post(auth, upload.single("profileImage"), updateUserImage);
 
 //Borra una movie favorita del usuario
 router.route("/movies").delete(auth, deleteMovie);

@@ -31,17 +31,15 @@
 .profile-image-container {
   /*border: 2px solid black;
   */
-
+  position: relative;
+  text-align: center;
   margin-left: 4px;
   width: 250px;
-
-  height: 300px;
   overflow: hidden;
 }
 
 .profile-image {
   max-width: 100%;
-  max-height: 100%;
 }
 
 .profile-username-edit-button {
@@ -53,6 +51,18 @@
 .profile-username-edit-button span {
   color: white;
   font-size: 30px;
+}
+
+.profile-image-label {
+}
+
+.profile-image-input {
+  /* position: absolute;
+  top: 20px;
+  left: 50px;
+  width: 1px;
+  height: 1px; */
+  display: none;
 }
 
 .favorite-movies {

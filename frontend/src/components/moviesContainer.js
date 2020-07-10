@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 import "../assets/styles/moviesContainer.css";
 import { withRouter } from "react-router-dom";
 import { getMoviesWithWord } from "../utils/omdbRequest";
+import Pagination from "react-bootstrap/Pagination";
 
 class MoviesContainer extends Component {
   constructor(props) {
@@ -9,6 +10,10 @@ class MoviesContainer extends Component {
     this.state = {
       movies: undefined,
       isFetching: true,
+      cantPages: 0,
+      actualPage: 1,
+      pageNumbers: [],
+      showPages: [],
     };
   }
 
@@ -17,31 +22,92 @@ class MoviesContainer extends Component {
     if (this.props.movies) {
       this.setState({ movies: this.props.movies, isFetching: false });
     } else {
-      getMoviesWithWord(this.props.searchWord)
+      getMoviesWithWord(this.props.searchWord, this.state.actualPage)
         .then((result) => {
-          this.setState({ movies: result, isFetching: false });
+          const pageNumbers = [];
+          for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
+            pageNumbers.push(i);
+          }
+
+          const showPages = pageNumbers.filter((num) => {
+            return (
+              num - this.state.actualPage > -4 &&
+              num - this.state.actualPage < 4
+            );
+          });
+
+          console.log("showPages: ", showPages);
+          console.log("pageNumbers: ", pageNumbers);
+          this.setState({
+            movies: result.result,
+            cantPages: Math.ceil(result.cant / 48),
+            actualPage: 1,
+            isFetching: false,
+            pageNumbers: pageNumbers,
+            showPages: showPages,
+          });
+          console.log("cantpaginas: ", this.state.cantPages);
         })
         .catch((error) => {
+          this.setState({ isFetching: false });
           console.log(error);
         });
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchWord !== this.props.searchWord) {
-      getMoviesWithWord(this.props.searchWord)
+      getMoviesWithWord(this.props.searchWord, this.state.actualPage)
         .then((result) => {
-          this.sortMovies(result, "normal");
-          this.setState({ movies: result, isFetching: false });
+          const pageNumbers = [];
+          for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
+            pageNumbers.push(i);
+          }
+          this.sortMovies(result.result, "normal");
+          this.setState({
+            movies: result.result,
+            cantPages: Math.ceil(result.cant / 10),
+            actualPage: 1,
+            isFetching: false,
+            pageNumbers: pageNumbers,
+          });
         })
         .catch((error) => {
+          this.setState({ isFetching: false });
           console.log(error);
         });
     }
     if (prevProps.order !== this.props.order) {
       let arr = this.state.movies;
       this.sortMovies(arr, this.props.order);
-      this.setState({ movies: arr });
+      this.setState({ movies: arr, actualPage: 1 });
+    }
+    if (prevState.actualPage !== this.state.actualPage) {
+      getMoviesWithWord(this.props.searchWord, this.state.actualPage)
+        .then((result) => {
+          const pageNumbers = [];
+          for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
+            pageNumbers.push(i);
+          }
+
+          const showPages = pageNumbers.filter((num) => {
+            return (
+              num - this.state.actualPage > -4 &&
+              num - this.state.actualPage < 4
+            );
+          });
+
+          this.setState({
+            movies: result.result,
+            isFetching: false,
+            pageNumbers: pageNumbers,
+            showPages: showPages,
+          });
+        })
+        .catch((error) => {
+          this.setState({ isFetching: false });
+          console.log(error);
+        });
     }
   }
 
@@ -101,6 +167,11 @@ class MoviesContainer extends Component {
     this.props.history.push("/movie/" + imdbID);
   };
 
+  handlePageChange = (event) => {
+    console.log("Se cambio de pagina", event.target.id);
+    this.setState({ actualPage: Number(event.target.id) });
+  };
+
   render() {
     return (
       <div className="movies-wrapper">
@@ -120,6 +191,41 @@ class MoviesContainer extends Component {
             })
           ) : (
             <h1>No results found!</h1>
+          )}
+          {this.state.isFetching ? null : (
+            <Pagination
+              style={{
+                position: "absolute",
+                bottom: "1px",
+                marginTop: "10px",
+                backgroundColor: "blue",
+              }}
+            >
+              {this.state.showPages.map((num) => {
+                return (
+                  <Pagination.Item
+                    key={num}
+                    id={num}
+                    active={this.state.actualPage === num}
+                    onClick={this.handlePageChange}
+                  >
+                    {num}
+                  </Pagination.Item>
+                );
+              })}
+              {/* {this.state.pageNumbers.map((num) => {
+                return (
+                  <Pagination.Item
+                    key={num}
+                    id={num}
+                    active={this.state.actualPage === num}
+                    onClick={this.handlePageChange}
+                  >
+                    {num}
+                  </Pagination.Item>
+                );
+              })} */}
+            </Pagination>
           )}
         </div>
       </div>
@@ -163,7 +269,6 @@ function Poster(props) {
           <LeavePoster onClick={props.onClick} movie={props.movie} />
         ) : null}
       </div>
-      {/* {hoverActivo ? props.children : null} */}
     </div>
   );
 }

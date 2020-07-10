@@ -97,12 +97,35 @@ module.exports = {
       });
   },
 
+  updateUserImage: (req, res) => {
+    User.findById({ _id: req.userId })
+      .then((user) => {
+        console.log("primer then", req.file);
+        user.profileImage = req.file.filename;
+        user
+          .save()
+          .then((response) => {
+            console.log("segundo then");
+            res.json({
+              message: "Update succesful",
+              newProfileImageName: req.file.filename,
+            });
+          })
+          .catch((err) => {
+            console.log("segundo catch");
+            res.status(500).json(err);
+          });
+      })
+      .catch((err) => {
+        console.log("primer catch");
+        res.status(404).json(err);
+      });
+  },
+
   updateUser: (req, res) => {
-    console.log("Esta es req.file: ", req.file);
     console.log("Este es el req.body: ", req.body);
     User.findById({ _id: req.userId })
       .then((user) => {
-        user.profileImage = req.file.filename;
         user.name = req.body.name;
         user.birthDate = req.body.birthDate;
         user.country = req.body.country;

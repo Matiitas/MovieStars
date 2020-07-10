@@ -23,7 +23,7 @@ const userSchema = new Schema(
     },
     movies: { type: Array, default: [] },
     profileImage: { type: String, default: "profile.png" },
-    name: { type: String, default: "N/A" },
+    name: { type: String },
     birthDate: {
       type: Date,
       min: "1900-01-01",
@@ -31,11 +31,9 @@ const userSchema = new Schema(
     },
     country: {
       type: String,
-      default: "N/A",
     },
     city: {
       type: String,
-      default: "N/A",
     },
   },
   {
