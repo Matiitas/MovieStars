@@ -4,14 +4,11 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { getMoviesWithWord } from "../utils/omdbRequest";
 import Pagination from "react-bootstrap/Pagination";
 
-type TParams = { id: string };
-
 interface IRecipeProps extends RouteComponentProps {
   page: number;
   searchWord: string;
   order: string;
-  movies?: any[];
-  /* history: RouteComponentProps<TParams>; */
+  movies?: any[] | undefined;
 }
 
 interface IRecipeState {
@@ -19,6 +16,7 @@ interface IRecipeState {
   isFetching: boolean;
   cantPages: number;
   actualPage: number;
+  moviesFound: boolean;
 }
 
 class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
@@ -29,14 +27,17 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       isFetching: true,
       cantPages: 0,
       actualPage: 0,
-      /*  pageNumbers: [],
-      showPages: [], */
+      moviesFound: false,
     };
   }
 
   componentDidMount() {
     if (this.props.movies) {
-      this.setState({ movies: this.props.movies, isFetching: false });
+      this.setState({
+        movies: this.props.movies,
+        isFetching: false,
+        moviesFound: true,
+      });
     } else {
       getMoviesWithWord(this.props.searchWord, this.props.page)
         .then((result) => {
@@ -56,14 +57,13 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
             cantPages: Math.ceil(result.cant / 10),
             actualPage: Number(this.props.page),
             isFetching: false,
-            /* pageNumbers: pageNumbers,
-            showPages: showPages, */
+            moviesFound: true,
           });
           console.log("cantpaginas: ", this.state.cantPages);
         })
         .catch((error) => {
-          this.setState({ isFetching: false });
-          console.log(error);
+          this.setState({ isFetching: false, moviesFound: false });
+          console.log("Erororo: ", error);
         });
     }
   }
@@ -80,13 +80,13 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           this.setState({
             movies: result.result,
             cantPages: Math.ceil(result.cant / 10),
-            actualPage: this.props.page,
+            actualPage: 1,
             isFetching: false,
-            /* pageNumbers: pageNumbers, */
+            moviesFound: true,
           });
         })
         .catch((error) => {
-          this.setState({ isFetching: false });
+          this.setState({ isFetching: false, moviesFound: false });
           console.log(error);
         });
     }
@@ -164,10 +164,11 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           movies: result.result,
           isFetching: false,
           actualPage: page,
+          moviesFound: true,
         });
       })
       .catch((error) => {
-        this.setState({ isFetching: false });
+        this.setState({ isFetching: false, moviesFound: false });
         console.log(error);
       });
   };
@@ -178,7 +179,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         <div className="posters-wrapper">
           {this.state.isFetching ? (
             <h1>Loading Movies</h1>
-          ) : this.state.movies !== undefined ? (
+          ) : this.state.moviesFound ? (
             this.state.movies.map((movie) => {
               return (
                 <Poster
@@ -192,7 +193,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           ) : (
             <h1>No results found!</h1>
           )}
-          {this.state.isFetching ? null : (
+          {!this.state.moviesFound || this.state.isFetching ? null : (
             <RenderPagination
               actualPage={this.state.actualPage}
               cantPages={this.state.cantPages}
@@ -308,7 +309,14 @@ function RenderPagination(props: IPaginationProps) {
   );
 }
 
-function Poster(props) {
+interface IPosterProps {
+  onClick(imdbID: string): void;
+  key: string;
+  movie: any;
+  render: string;
+}
+
+function Poster(props: IPosterProps) {
   const [hoverActivo, sethoverActivo] = useState(false);
   const [activeLeaveAnimation, setactiveLeaveAnimation] = useState(false);
 
@@ -348,7 +356,12 @@ function Poster(props) {
   );
 }
 
-function PosterInfo(props) {
+interface IPosterInfoProps {
+  onClick(imdbID: string): void;
+  movie: any;
+}
+
+function PosterInfo(props: IPosterInfoProps) {
   return (
     <ul className="list-of-details">
       <li className="text-center">
@@ -379,7 +392,12 @@ function PosterInfo(props) {
   );
 }
 
-function LeavePoster(props) {
+interface ILeavePosterProps {
+  onClick(imdbID: string): void;
+  movie: any;
+}
+
+function LeavePoster(props: ILeavePosterProps) {
   return (
     <div className="container-fluid poster-leave">
       <PosterInfo onClick={props.onClick} movie={props.movie} />
@@ -387,7 +405,12 @@ function LeavePoster(props) {
   );
 }
 
-function HoverPoster(props) {
+interface IHoverPosterProps {
+  onClick(imdbID: string): void;
+  movie: any;
+}
+
+function HoverPoster(props: IHoverPosterProps) {
   return (
     <div className="container-fluid poster-hover">
       <PosterInfo onClick={props.onClick} movie={props.movie} />
