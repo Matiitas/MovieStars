@@ -1,24 +1,40 @@
 import React, { useState, useEffect, Component } from "react";
 import "../assets/styles/moviesContainer.css";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import { getMoviesWithWord } from "../utils/omdbRequest";
 import Pagination from "react-bootstrap/Pagination";
 
-class MoviesContainer extends Component {
-  constructor(props) {
+type TParams = { id: string };
+
+interface IRecipeProps extends RouteComponentProps {
+  page: number;
+  searchWord: string;
+  order: string;
+  movies?: any[];
+  /* history: RouteComponentProps<TParams>; */
+}
+
+interface IRecipeState {
+  movies: any[];
+  isFetching: boolean;
+  cantPages: number;
+  actualPage: number;
+}
+
+class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
+  constructor(props: IRecipeProps) {
     super(props);
     this.state = {
-      movies: undefined,
+      movies: [],
       isFetching: true,
       cantPages: 0,
-      actualPage: undefined,
-      pageNumbers: [],
-      showPages: [],
+      actualPage: 0,
+      /*  pageNumbers: [],
+      showPages: [], */
     };
   }
 
   componentDidMount() {
-    console.log("Didmoount de moviesContainer", this.props.movies);
     if (this.props.movies) {
       this.setState({ movies: this.props.movies, isFetching: false });
     } else {
@@ -38,10 +54,10 @@ class MoviesContainer extends Component {
           this.setState({
             movies: result.result,
             cantPages: Math.ceil(result.cant / 10),
-            actualPage: this.props.page,
+            actualPage: Number(this.props.page),
             isFetching: false,
-            pageNumbers: pageNumbers,
-            showPages: showPages,
+            /* pageNumbers: pageNumbers,
+            showPages: showPages, */
           });
           console.log("cantpaginas: ", this.state.cantPages);
         })
@@ -52,7 +68,7 @@ class MoviesContainer extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: IRecipeProps, prevState: IRecipeState) {
     if (prevProps.searchWord !== this.props.searchWord) {
       getMoviesWithWord(this.props.searchWord, this.props.page)
         .then((result) => {
@@ -66,7 +82,7 @@ class MoviesContainer extends Component {
             cantPages: Math.ceil(result.cant / 10),
             actualPage: this.props.page,
             isFetching: false,
-            pageNumbers: pageNumbers,
+            /* pageNumbers: pageNumbers, */
           });
         })
         .catch((error) => {
@@ -75,13 +91,14 @@ class MoviesContainer extends Component {
         });
     }
     if (prevProps.order !== this.props.order) {
-      let arr = this.state.movies;
+      let arr: any[] = [];
+      arr = this.state.movies;
       this.sortMovies(arr, this.props.order);
-      this.setState({ movies: arr, actualPage: this.props.page });
+      this.setState({ movies: arr });
     }
   }
 
-  sortMovies = (movies, order) => {
+  sortMovies = (movies: Array<any>, order: string) => {
     switch (order) {
       case "alphabetic":
         movies.sort((a, b) => {
@@ -133,11 +150,11 @@ class MoviesContainer extends Component {
     }
   };
 
-  handleViewDetails = (imdbID) => {
+  handleViewDetails = (imdbID: string) => {
     this.props.history.push("/movie/" + imdbID);
   };
 
-  handlePageChange = (page) => {
+  handlePageChange = (page: number) => {
     this.setState({ isFetching: true });
     console.log("Handlendo el pagechange, con page:, ", page);
     this.props.history.push("/search/" + this.props.searchWord + "/" + page);
@@ -177,7 +194,7 @@ class MoviesContainer extends Component {
           )}
           {this.state.isFetching ? null : (
             <RenderPagination
-              actualPage={this.props.page}
+              actualPage={this.state.actualPage}
               cantPages={this.state.cantPages}
               handlePageChange={this.handlePageChange}
             />
@@ -188,19 +205,23 @@ class MoviesContainer extends Component {
   }
 }
 
-function RenderPagination(props) {
-  const [showPages, setshowPages] = useState([]);
+interface IPaginationProps {
+  actualPage: number;
+  cantPages: number;
+  handlePageChange(page: number): void;
+}
+
+function RenderPagination(props: IPaginationProps) {
+  const [showPages, setshowPages] = useState<number[]>([]);
   const [initialEllipsis, setinitialEllipsis] = useState(false);
-  const [actualPage, setactualPage] = useState();
   const [finalEllipsis, setfinalEllipsis] = useState(false);
 
-  const handlePageChange = (event) => {
+  const handlePageChange = (event: any) => {
     const page = Number(event.target.id);
     props.handlePageChange(page);
   };
 
   useEffect(() => {
-    setactualPage(props.actualPage);
     const pageNumbers = [];
     let showPages = [];
     for (let i = 1; i <= props.cantPages; i++) {
@@ -244,8 +265,8 @@ function RenderPagination(props) {
             {" "}
             <Pagination.Item
               key={1}
-              id={1}
-              active={actualPage === 1}
+              id={"1"}
+              active={props.actualPage === 1}
               onClick={handlePageChange}
             >
               {1}
@@ -258,8 +279,8 @@ function RenderPagination(props) {
             return (
               <Pagination.Item
                 key={num}
-                id={num}
-                active={actualPage === num}
+                id={num.toString()}
+                active={props.actualPage === num}
                 onClick={handlePageChange}
               >
                 {num}
@@ -274,8 +295,8 @@ function RenderPagination(props) {
             <Pagination.Ellipsis disabled />{" "}
             <Pagination.Item
               key={props.cantPages}
-              id={props.cantPages}
-              active={actualPage === props.cantPages}
+              id={props.cantPages.toString()}
+              active={props.actualPage === props.cantPages}
               onClick={handlePageChange}
             >
               {props.cantPages}
