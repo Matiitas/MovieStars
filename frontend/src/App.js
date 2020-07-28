@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <Route path="/" exact component={Home} />
-      <Route path="/search/:searchWord" exact component={Search} />
+      <Route path="/search/:searchWord/:page" exact component={Search} />
       <Route path="/login" exact component={protectRoute(Login, true, false)} />
       <Route
         path="/profile"

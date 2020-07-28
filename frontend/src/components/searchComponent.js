@@ -16,7 +16,7 @@ class Search extends Component {
   };
 
   render() {
-    const { searchWord } = this.props.match.params;
+    const { searchWord, page } = this.props.match.params;
     return (
       <div>
         <NavBar />
@@ -27,7 +27,11 @@ class Search extends Component {
         <br />
         <br />
         <br />
-        <MoviesContainer searchWord={searchWord} order={this.state.order} />
+        <MoviesContainer
+          searchWord={searchWord}
+          page={page}
+          order={this.state.order}
+        />
       </div>
     );
   }
