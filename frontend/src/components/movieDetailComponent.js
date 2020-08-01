@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
 import { getMovieByID } from "../utils/omdbRequest";
+import Loading from "./loading";
 import {
   getFavoriteMovies,
   addToFavorites,
@@ -10,6 +11,7 @@ import {
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import PopUp from "./popup";
+import Footer from "./footer";
 
 class MovieDetail extends Component {
   constructor(props) {
@@ -90,9 +92,9 @@ class MovieDetail extends Component {
     const message = "You need to be logged in to perform this action.";
     return (
       <div>
-        <Navbar></Navbar>
+        <Navbar />
         {this.state.isFetching ? (
-          <h1>Loading</h1>
+          <Loading />
         ) : (
           <div className="global-wrapper">
             <div className="first-row">
@@ -138,6 +140,7 @@ class MovieDetail extends Component {
             </div>
           </div>
         )}
+        <Footer />
       </div>
     );
   }

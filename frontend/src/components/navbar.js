@@ -13,7 +13,6 @@ class Navbar extends Component {
     super(props);
     this.state = {};
   }
-
   handleReload = (event) => {
     event.preventDefault();
     if (this.props.history.location.pathname === "/") {
@@ -33,6 +32,7 @@ class Navbar extends Component {
       console.log("Search input void");
     } else {
       this.props.history.push("/search/" + inputSearch + "/1");
+      window.location.reload();
     }
   };
 

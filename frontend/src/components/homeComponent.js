@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import NavBar from "./navbar";
+import Footer from "./footer";
 import MoviesContainer from "./moviesContainer";
 import "../assets/styles/home.css";
 import { getMoviesFromArrayOfTitles } from "../utils/omdbRequest";
+import Loading from "./loading";
 
 class Home extends Component {
   constructor(props) {
@@ -75,13 +77,11 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <NavBar />
         {this.state.isFetching ? (
-          <div>
-            <h2>No movies recommended.</h2>
-          </div>
+          <Loading />
         ) : (
           <React.Fragment>
-            <NavBar />
             <div className="welcome-message">
               <div className="welcome-container">
                 <h1>
@@ -113,6 +113,7 @@ class Home extends Component {
             ) : null}
           </React.Fragment>
         )}
+        <Footer />
       </div>
     );
   }

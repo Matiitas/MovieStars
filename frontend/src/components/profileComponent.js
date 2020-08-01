@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getMoviesByArrayOfID } from "../utils/omdbRequest";
 import { ImageIcon } from "@primer/octicons-react";
+import Loading from "./loading";
+import Footer from "./footer";
 
 class Profile extends Component {
   constructor(props) {
@@ -72,7 +74,7 @@ class Profile extends Component {
       <div>
         {this.state.isFetching ? (
           <div>
-            <h1>Loading</h1>
+            <Loading />
           </div>
         ) : (
           <div>
@@ -160,6 +162,7 @@ class Profile extends Component {
                 </div>
               )}
             </div>
+            <Footer />
           </div>
         )}
       </div>

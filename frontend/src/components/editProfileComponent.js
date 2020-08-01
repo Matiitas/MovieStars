@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Navbar from "./navbar";
 import axios from "axios";
+import Footer from "./footer";
+import Loading from "./loading";
 
 class EditProfile extends Component {
   constructor(props) {
@@ -119,76 +121,78 @@ class EditProfile extends Component {
   render() {
     return (
       <div>
-        <Navbar />
         {this.state.isFetching ? (
-          <div>
-            <h1>Loading</h1>
-          </div>
+          <Loading />
         ) : (
-          <div
-            style={{
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            Edit Profile
-            <form
-              onSubmit={this.handleSubmit}
-              style={{ position: "relative", top: "200px" }}
+          <React.Fragment>
+            <Navbar />
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <div className="form-group row">
-                <label>Name</label>
-                <input
-                  /* className="form-control is-invalid" */
-                  maxLength="32"
-                  type="text"
-                  onChange={this.handleNameChange}
-                  value={this.state.name ? this.state.name : ""}
-                  placeholder="Name"
-                />
-                {/* <div className="invalid-feedback">
+              Edit Profile
+              <form
+                onSubmit={this.handleSubmit}
+                style={{ position: "relative", top: "200px" }}
+              >
+                <div className="form-group row">
+                  <label>Name</label>
+                  <input
+                    /* className="form-control is-invalid" */
+                    maxLength="32"
+                    type="text"
+                    onChange={this.handleNameChange}
+                    value={this.state.name ? this.state.name : ""}
+                    placeholder="Name"
+                  />
+                  {/* <div className="invalid-feedback">
                   Please provide a valid city.
                 </div> */}
-              </div>
-              <div className="form-group row">
-                <label>Birth Date</label>
-                <input
-                  min="01-01-1900"
-                  max="01-01-2030"
-                  type="date"
-                  onChange={this.handleBirthChange}
-                  value={
-                    this.state.birthDate
-                      ? this.state.birthDate.toLocaleString().split("T")[0]
-                      : ""
-                  }
-                />
-              </div>
-              <div className="form-group row">
-                <label>Country</label>
-                <input
-                  type="text"
-                  onChange={this.handleCountryChange}
-                  value={this.state.country ? this.state.country : ""}
-                  placeholder="Country"
-                />
-              </div>
-              <div className="form-group row">
-                <label>City</label>
-                <input
-                  type="text"
-                  onChange={this.handleCityChange}
-                  value={this.state.city ? this.state.city : ""}
-                  placeholder="City"
-                />
-              </div>
-              <input type="submit" value="Edit" />
-            </form>
-          </div>
+                </div>
+                <div className="form-group row">
+                  <label>Birth Date</label>
+                  <input
+                    min="01-01-1900"
+                    max="01-01-2030"
+                    type="date"
+                    onChange={this.handleBirthChange}
+                    value={
+                      this.state.birthDate
+                        ? this.state.birthDate.toLocaleString().split("T")[0]
+                        : ""
+                    }
+                  />
+                </div>
+                <div className="form-group row">
+                  <label>Country</label>
+                  <input
+                    type="text"
+                    onChange={this.handleCountryChange}
+                    value={this.state.country ? this.state.country : ""}
+                    placeholder="Country"
+                  />
+                </div>
+                <div className="form-group row">
+                  <label>City</label>
+                  <input
+                    type="text"
+                    onChange={this.handleCityChange}
+                    value={this.state.city ? this.state.city : ""}
+                    placeholder="City"
+                  />
+                </div>
+                <input type="submit" value="Edit" />
+              </form>
+            </div>
+            <Footer />
+          </React.Fragment>
         )}
+        <Footer />
       </div>
     );
   }
