@@ -3,6 +3,7 @@ import NavBar from "./navbar";
 import OrderBar from "./orderBar";
 import MoviesContainer from "./moviesContainer";
 import { getAllMoviesWithWord } from "../utils/omdbRequest";
+import { getMoviesWithTitle } from "../utils/backendRequest";
 import Footer from "./footer";
 import Loading from "./loading";
 
@@ -18,6 +19,16 @@ class Search extends Component {
   }
 
   componentDidMount() {
+    const { searchWord } = this.props.match.params;
+    this.setState({ searchWord: searchWord });
+    getMoviesWithTitle(searchWord)
+      .then((result) => {
+        this.setState({ movies: result.data.movies, isFetching: false });
+      })
+      .catch((err) => console.log(err));
+  }
+
+  /* componentDidMount() {
     console.log("Corre el mount del searchComp");
     const { searchWord } = this.props.match.params;
     this.setState({ searchWord: searchWord });
@@ -30,7 +41,7 @@ class Search extends Component {
         console.log("No carga movies aunque las encuentra: ", err)
       );
   }
-
+ */
   /* componentDidUpdate(prevProps, prevState) {
     if (prevState.searchWord !== this.state.searchWord) {
       getAllMoviesWithWord(this.state.searchWord)

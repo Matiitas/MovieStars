@@ -343,8 +343,8 @@ function Poster(props: IPosterProps) {
       <div className="image-container">
         <img
           className="poster-img"
-          src={props.movie.Poster}
-          alt={props.movie.Title}
+          src={props.movie.poster}
+          alt={props.movie.title}
         />
         {hoverActivo ? (
           <HoverPoster onClick={props.onClick} movie={props.movie} />
@@ -365,7 +365,7 @@ function PosterInfo(props: IPosterInfoProps) {
   return (
     <ul className="list-of-details">
       <li className="text-center">
-        <h4 className="font-weight-bold">{props.movie.Title}</h4>
+        <h4 className="font-weight-bold">{props.movie.title}</h4>
       </li>
       <li className="justify-content-center pb-3">
         <button
@@ -377,16 +377,16 @@ function PosterInfo(props: IPosterInfoProps) {
       </li>
       <li>
         <h5>Duration:</h5>
-        {props.movie.Runtime ? <h6>{props.movie.Runtime}</h6> : <h6> N/A</h6>}
+        {props.movie.runtime ? <h6>{props.movie.runtime}</h6> : <h6> N/A</h6>}
       </li>
       <li>
         <h5>Year:</h5>{" "}
-        {props.movie.Year ? <h6>{props.movie.Year}</h6> : <h6> N/A</h6>}
+        {props.movie.year ? <h6>{props.movie.year}</h6> : <h6> N/A</h6>}
       </li>
-      <li>{props.movie.Plot ? <h5>{props.movie.Plot}</h5> : <h5>N/A</h5>}</li>
+      <li>{props.movie.plot ? <h5>{props.movie.plot}</h5> : <h5>N/A</h5>}</li>
       <li>
         <h5>Genre:</h5>
-        {props.movie.Genre ? <h6>{props.movie.Genre}</h6> : <h6>N/A</h6>}
+        {props.movie.genre ? <h6>{props.movie.genre}</h6> : <h6>N/A</h6>}
       </li>
     </ul>
   );

@@ -16,4 +16,13 @@ const deleteFromFavorites = (imdbID) => {
   );
 };
 
-export { getFavoriteMovies, addToFavorites, deleteFromFavorites };
+const getMoviesWithTitle = (title) => {
+  return axios.get("http://localhost:5000/api/v1/movies/title?title=" + title);
+};
+
+export {
+  getFavoriteMovies,
+  addToFavorites,
+  deleteFromFavorites,
+  getMoviesWithTitle,
+};
