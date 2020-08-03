@@ -21,7 +21,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    movies: { type: Array, default: [] },
+    movies: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Movie",
+      },
+    ],
     profileImage: { type: String, default: "profile.png" },
     name: { type: String },
     birthDate: {

@@ -11,7 +11,9 @@ app.use(cors());
 app.use(express.json());
 
 const usersRoute = require("./routes/users");
+const moviesRoute = require("./routes/movies");
 app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/movies", moviesRoute);
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {

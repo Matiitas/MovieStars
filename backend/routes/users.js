@@ -16,6 +16,7 @@ const {
 } = require("../controllers/usersController");
 const multer = require("multer");
 
+// Para subir imagenes
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/jpeg" ||
@@ -45,6 +46,8 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
+////////////////////////////////////////////
+// LA RUTA ES http://localhost:5000/api/v1/users
 /* router.route("/").get(auth, getUsers); */
 
 router
