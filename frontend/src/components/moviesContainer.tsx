@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Component } from "react";
 import "../assets/styles/moviesContainer.css";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { getMoviesWithWord } from "../utils/omdbRequest";
+/* import { getMoviesWithWord } from "../utils/omdbRequest"; */
 import Pagination from "react-bootstrap/Pagination";
 
 interface IRecipeProps extends RouteComponentProps {
@@ -38,9 +38,9 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         isFetching: false,
         moviesFound: true,
       });
-    } else {
+    } /* else {
       getMoviesWithWord(this.props.searchWord, this.props.page)
-        .then((result) => {
+        .then((result: { cant: number; result: any }) => {
           const pageNumbers = [];
           for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
             pageNumbers.push(i);
@@ -61,17 +61,28 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           });
           console.log("cantpaginas: ", this.state.cantPages);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           this.setState({ isFetching: false, moviesFound: false });
           console.log("Erororo: ", error);
         });
-    }
+    } */
   }
 
   componentDidUpdate(prevProps: IRecipeProps, prevState: IRecipeState) {
+    if (prevProps.order !== this.props.order) {
+      /* let arr: any[] = [];
+      arr = this.state.movies;
+      console.log("Antes de ordenar en el update: ", arr); */
+      this.sortMovies(this.props.order);
+      /* console.log("Despues de ordenar en el update: ", arr);
+      this.setState({ movies: arr }); */
+    }
+  }
+
+  /* componentDidUpdate(prevProps: IRecipeProps, prevState: IRecipeState) {
     if (prevProps.searchWord !== this.props.searchWord) {
       getMoviesWithWord(this.props.searchWord, this.props.page)
-        .then((result) => {
+        .then((result: { cant: number; result: any[] }) => {
           const pageNumbers = [];
           for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
             pageNumbers.push(i);
@@ -85,7 +96,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
             moviesFound: true,
           });
         })
-        .catch((error) => {
+        .catch((error: any) => {
           this.setState({ isFetching: false, moviesFound: false });
           console.log(error);
         });
@@ -97,12 +108,15 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       this.setState({ movies: arr });
     }
   }
-
-  sortMovies = (movies: Array<any>, order: string) => {
+ */
+  sortMovies = (order: string) => {
+    let arr: any[] = [];
+    arr = [...this.state.movies];
+    console.log("Array es:", arr);
     switch (order) {
       case "alphabetic":
-        movies.sort((a, b) => {
-          if (a.Title <= b.Title) {
+        arr.sort((a, b) => {
+          if (a.title <= b.title) {
             return -1;
           } else {
             return 1;
@@ -110,7 +124,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         });
         break;
       case "imdbRatingDesc":
-        movies.sort((a, b) => {
+        arr.sort((a, b) => {
           if (a.imdbRating >= b.imdbRating) {
             return -1;
           } else {
@@ -119,7 +133,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         });
         break;
       case "imdbRatingAsc":
-        movies.sort((a, b) => {
+        arr.sort((a, b) => {
           if (a.imdbRating <= b.imdbRating) {
             return -1;
           } else {
@@ -128,8 +142,8 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         });
         break;
       case "yearDesc":
-        movies.sort((a, b) => {
-          if (a.Year >= b.Year) {
+        arr.sort((a, b) => {
+          if (a.year >= b.year) {
             return -1;
           } else {
             return 1;
@@ -137,8 +151,8 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         });
         break;
       case "yearAsc":
-        movies.sort((a, b) => {
-          if (a.Year <= b.Year) {
+        arr.sort((a, b) => {
+          if (a.year <= b.year) {
             return -1;
           } else {
             return 1;
@@ -148,18 +162,21 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       default:
         break;
     }
+    this.setState({ movies: arr });
   };
 
   handleViewDetails = (imdbID: string) => {
     this.props.history.push("/movie/" + imdbID);
   };
 
-  handlePageChange = (page: number) => {
+  handlePageChange = (page: number) => {};
+
+  /*handlePageChange = (page: number) => {
     this.setState({ isFetching: true });
     console.log("Handlendo el pagechange, con page:, ", page);
     this.props.history.push("/search/" + this.props.searchWord + "/" + page);
-    getMoviesWithWord(this.props.searchWord, page)
-      .then((result) => {
+     getMoviesWithWord(this.props.searchWord, page)
+      .then((result: { result: any }) => {
         this.setState({
           movies: result.result,
           isFetching: false,
@@ -167,11 +184,11 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           moviesFound: true,
         });
       })
-      .catch((error) => {
+      .catch((error: any) => {
         this.setState({ isFetching: false, moviesFound: false });
         console.log(error);
-      });
-  };
+      }); 
+  };*/
 
   render() {
     return (

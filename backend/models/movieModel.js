@@ -31,6 +31,9 @@ const movieSchema = new Schema(
       type: String,
       unique: true,
     },
+    imdbRating: {
+      type: String,
+    },
     plot: {
       type: String,
       trim: true,

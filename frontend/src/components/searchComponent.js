@@ -23,42 +23,37 @@ class Search extends Component {
     this.setState({ searchWord: searchWord });
     getMoviesWithTitle(searchWord)
       .then((result) => {
-        this.setState({ movies: result.data.movies, isFetching: false });
+        this.setState({
+          movies: result.data.movies,
+          isFetching: false,
+          order: "normal",
+        });
       })
       .catch((err) => console.log(err));
   }
 
-  /* componentDidMount() {
-    console.log("Corre el mount del searchComp");
+  componentDidUpdate(prevProps, prevState) {
     const { searchWord } = this.props.match.params;
-    this.setState({ searchWord: searchWord });
-    getAllMoviesWithWord(searchWord)
-      .then((result) => {
-        console.log("El result es: ", result);
-        this.setState({ movies: result.result, isFetching: false });
-      })
-      .catch((err) =>
-        console.log("No carga movies aunque las encuentra: ", err)
-      );
-  }
- */
-  /* componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchWord !== this.state.searchWord) {
-      getAllMoviesWithWord(this.state.searchWord)
+    if (prevState.searchWord !== searchWord) {
+      this.setState({ searchWord: searchWord, isFetching: true });
+      getMoviesWithTitle(searchWord)
         .then((result) => {
-          console.log("El result es: ", result);
-          this.setState({ movies: result.result, isFetching: false });
+          this.setState({
+            movies: result.data.movies,
+            isFetching: false,
+            order: "normal",
+          });
         })
         .catch((err) => console.log(err));
     }
-  } */
+  }
 
   handleOrder = (value) => {
     this.setState({ order: value });
   };
 
   render() {
-    const { searchWord, page } = this.props.match.params;
+    /* const { searchWord, page } = this.props.match.params; */
     return (
       <div>
         <NavBar />
@@ -73,7 +68,10 @@ class Search extends Component {
             <br />
             <br />
             <br />
-            <MoviesContainer movies={this.state.movies} />
+            <MoviesContainer
+              movies={this.state.movies}
+              order={this.state.order}
+            />
           </React.Fragment>
         )}
         <Footer />

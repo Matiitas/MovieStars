@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
-import { getMovieByID } from "../utils/omdbRequest";
+/* import { getMovieByID } from "../utils/omdbRequest"; */
 import Loading from "./loading";
 import {
   getFavoriteMovies,
@@ -39,14 +39,14 @@ class MovieDetail extends Component {
         });
     }
 
-    getMovieByID(imdbID)
+    /* getMovieByID(imdbID)
       .then((res) => {
         console.log("Esta es la res", res);
         this.setState({ movie: res.data, isFetching: false });
       })
       .catch((err) => {
         console.log(err);
-      });
+      }); */
   }
 
   handleClickFavorites = () => {

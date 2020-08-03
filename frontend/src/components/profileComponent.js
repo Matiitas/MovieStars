@@ -6,7 +6,7 @@ import MoviesContainer from "./moviesContainer";
 import axios from "axios";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getMoviesByArrayOfID } from "../utils/omdbRequest";
+/* import { getMoviesByArrayOfID } from "../utils/omdbRequest"; */
 import { ImageIcon } from "@primer/octicons-react";
 import Loading from "./loading";
 import Footer from "./footer";
@@ -30,7 +30,7 @@ class Profile extends Component {
         if (user) {
           this.setState({ user: user.data });
           console.log("state", user.data);
-          getMoviesByArrayOfID(user.data.movies)
+          /* getMoviesByArrayOfID(user.data.movies)
             .then((response) => {
               this.setState({
                 movies: response,
@@ -40,7 +40,7 @@ class Profile extends Component {
             .catch((err) => {
               console.log(err);
               this.setState({ isFetching: false });
-            });
+            }); */
         }
       } else {
         //hago algo si entra un guest

@@ -57,6 +57,7 @@ module.exports = {
   getAllMoviesWithTitle: async (req, res) => {
     const { title } = req.query;
     const moviesFromDB = await getMoviesFromDatabaseWithTitle(title);
+    console.log("Movies from db length: ", moviesFromDB.length);
     if (moviesFromDB.length > 0) {
       res.status(200).json({ movies: moviesFromDB });
     } else {
@@ -76,9 +77,65 @@ module.exports = {
         arrOfMovies.forEach((movie) => {
           promises.push(getMovieByID(movie.imdbID, "short"));
         });
-        Promise.all(promises.map((p) => p.catch(() => undefined))).then(
-          async (movies) => {
-            movies.forEach((movie) => {
+        try {
+          const moviesDePromises = await Promise.all(
+            promises.map((p) => p.catch(() => undefined))
+          );
+          moviesDePromises.forEach((movie) => {
+            if (movie && movie.status === 200) {
+              let {
+                Actors,
+                Title,
+                Year,
+                Runtime,
+                Writer,
+                Director,
+                Production,
+                Genre,
+                Plot,
+                Language,
+                Country,
+                Awards,
+                Ratings,
+                Poster,
+                imdbID,
+                imdbRating,
+              } = movie.data;
+              newMovie = new Movie({
+                actors: Actors,
+                title: Title,
+                year: Year,
+                runtime: Runtime,
+                writer: Writer,
+                director: Director,
+                production: Production,
+                genre: Genre,
+                plot: Plot,
+                language: Language,
+                country: Country,
+                awards: Awards,
+                ratings: Ratings,
+                poster: Poster,
+                imdbID: imdbID,
+                imdbRating: imdbRating,
+              });
+              result.push(newMovie);
+            }
+          });
+          try {
+            const addedMovies = await Movie.insertMany(result, {
+              ordered: false,
+            });
+            res.status(200).json({ movies: addedMovies });
+          } catch (e) {
+            console.log("Error del catch en inserMany: ", e);
+          }
+        } catch (e) {
+          console.log("Error del catch en moviesPromises: ", e);
+        }
+        /* Promise.all(promises.map((p) => p.catch(() => undefined)))
+          .then(async (movies) => {
+            movies.forEach(async (movie) => {
               if (movie && movie.status === 200) {
                 let {
                   Actors,
@@ -96,6 +153,7 @@ module.exports = {
                   Ratings,
                   Poster,
                   imdbID,
+                  imdbRating,
                 } = movie.data;
                 newMovie = new Movie({
                   actors: Actors,
@@ -113,6 +171,7 @@ module.exports = {
                   ratings: Ratings,
                   poster: Poster,
                   imdbID: imdbID,
+                  imdbRating: imdbRating,
                 });
                 result.push(newMovie);
               }
@@ -121,14 +180,18 @@ module.exports = {
               const addedMovies = await Movie.insertMany(result, {
                 ordered: false,
               });
+              console.log("EN el try");
               res.status(200).json({ movies: addedMovies });
             } catch (e) {
+              console.log("EN el catch");
               res
                 .status(500)
                 .json({ message: "Can't insert in database", error: e });
             }
-          }
-        );
+          })
+          .catch((err) => {
+            res.status(500).json({ message: "Cant do promises", error: err });
+          }); */
       } else {
         console.log("No movies found");
         res.status(404).json({ message: "No movies found" });
