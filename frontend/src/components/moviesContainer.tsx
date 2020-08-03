@@ -38,7 +38,9 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         isFetching: false,
         moviesFound: true,
       });
-    } /* else {
+    }
+    window.scrollTo(0, 0);
+    /* else {
       getMoviesWithWord(this.props.searchWord, this.props.page)
         .then((result: { cant: number; result: any }) => {
           const pageNumbers = [];
