@@ -5,10 +5,9 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import Pagination from "react-bootstrap/Pagination";
 
 interface IRecipeProps extends RouteComponentProps {
-  page: number;
   searchWord: string;
   order: string;
-  movies?: any[] | undefined;
+  movies: any[];
 }
 
 interface IRecipeState {
@@ -17,6 +16,7 @@ interface IRecipeState {
   cantPages: number;
   actualPage: number;
   moviesFound: boolean;
+  moviesPerPage: any[];
 }
 
 class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
@@ -26,94 +26,55 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       movies: [],
       isFetching: true,
       cantPages: 0,
-      actualPage: 0,
+      actualPage: 1,
       moviesFound: false,
+      moviesPerPage: [],
     };
   }
 
   componentDidMount() {
-    if (this.props.movies) {
+    if (this.props.movies.length > 0) {
+      const pageNumbers = [];
+      for (let i = 1; i <= Math.ceil(this.props.movies.length / 40); i++) {
+        pageNumbers.push(i);
+      }
+
+      const showPages = pageNumbers.filter((num) => {
+        return (
+          num - this.state.actualPage > -4 && num - this.state.actualPage < 4
+        );
+      });
+      console.log("showPages: ", showPages);
+      console.log("pageNumbers: ", pageNumbers);
+      const orderedMovies = this.sortMovies(this.props.order);
+      this.setState({ movies: orderedMovies }, () =>
+        this.sliceMovies(1, "state")
+      );
+
       this.setState({
-        movies: this.props.movies,
+        /* movies: orderMovies, */
+        cantPages: Math.ceil(this.props.movies.length / 40),
         isFetching: false,
         moviesFound: true,
       });
+      window.scrollTo(0, 0);
+    } else {
+      this.setState({ moviesFound: false, isFetching: false });
     }
-    window.scrollTo(0, 0);
-    /* else {
-      getMoviesWithWord(this.props.searchWord, this.props.page)
-        .then((result: { cant: number; result: any }) => {
-          const pageNumbers = [];
-          for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
-            pageNumbers.push(i);
-          }
-
-          const showPages = pageNumbers.filter((num) => {
-            return num - this.props.page > -4 && num - this.props.page < 4;
-          });
-
-          console.log("showPages: ", showPages);
-          console.log("pageNumbers: ", pageNumbers);
-          this.setState({
-            movies: result.result,
-            cantPages: Math.ceil(result.cant / 10),
-            actualPage: Number(this.props.page),
-            isFetching: false,
-            moviesFound: true,
-          });
-          console.log("cantpaginas: ", this.state.cantPages);
-        })
-        .catch((error: any) => {
-          this.setState({ isFetching: false, moviesFound: false });
-          console.log("Erororo: ", error);
-        });
-    } */
   }
 
   componentDidUpdate(prevProps: IRecipeProps, prevState: IRecipeState) {
     if (prevProps.order !== this.props.order) {
-      /* let arr: any[] = [];
-      arr = this.state.movies;
-      console.log("Antes de ordenar en el update: ", arr); */
-      this.sortMovies(this.props.order);
-      /* console.log("Despues de ordenar en el update: ", arr);
-      this.setState({ movies: arr }); */
+      let orderedMovies = this.sortMovies(this.props.order);
+      this.setState({ movies: orderedMovies }, () =>
+        this.sliceMovies(1, "state")
+      );
     }
   }
 
-  /* componentDidUpdate(prevProps: IRecipeProps, prevState: IRecipeState) {
-    if (prevProps.searchWord !== this.props.searchWord) {
-      getMoviesWithWord(this.props.searchWord, this.props.page)
-        .then((result: { cant: number; result: any[] }) => {
-          const pageNumbers = [];
-          for (let i = 1; i <= Math.ceil(result.cant / 10); i++) {
-            pageNumbers.push(i);
-          }
-          this.sortMovies(result.result, "normal");
-          this.setState({
-            movies: result.result,
-            cantPages: Math.ceil(result.cant / 10),
-            actualPage: 1,
-            isFetching: false,
-            moviesFound: true,
-          });
-        })
-        .catch((error: any) => {
-          this.setState({ isFetching: false, moviesFound: false });
-          console.log(error);
-        });
-    }
-    if (prevProps.order !== this.props.order) {
-      let arr: any[] = [];
-      arr = this.state.movies;
-      this.sortMovies(arr, this.props.order);
-      this.setState({ movies: arr });
-    }
-  }
- */
   sortMovies = (order: string) => {
     let arr: any[] = [];
-    arr = [...this.state.movies];
+    arr = [...this.props.movies];
     console.log("Array es:", arr);
     switch (order) {
       case "alphabetic":
@@ -164,33 +125,34 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       default:
         break;
     }
-    this.setState({ movies: arr });
+    return arr;
+    /* this.setState({ movies: arr }); */
+  };
+
+  sliceMovies = (page: number, election: string) => {
+    let arr: any[] = [];
+    switch (election) {
+      case "props":
+        arr = this.props.movies.slice((page - 1) * 40, page * 40);
+        break;
+      case "state":
+        arr = this.state.movies.slice((page - 1) * 40, page * 40);
+    }
+    console.log("Slice arr: ", arr);
+    this.setState({ moviesPerPage: arr, actualPage: page });
+    /* return arr; */
   };
 
   handleViewDetails = (imdbID: string) => {
     this.props.history.push("/movie/" + imdbID);
   };
 
-  handlePageChange = (page: number) => {};
-
-  /*handlePageChange = (page: number) => {
-    this.setState({ isFetching: true });
-    console.log("Handlendo el pagechange, con page:, ", page);
-    this.props.history.push("/search/" + this.props.searchWord + "/" + page);
-     getMoviesWithWord(this.props.searchWord, page)
-      .then((result: { result: any }) => {
-        this.setState({
-          movies: result.result,
-          isFetching: false,
-          actualPage: page,
-          moviesFound: true,
-        });
-      })
-      .catch((error: any) => {
-        this.setState({ isFetching: false, moviesFound: false });
-        console.log(error);
-      }); 
-  };*/
+  handlePageChange = (page: number) => {
+    console.log("Se cambio a page: ", page);
+    this.sliceMovies(page, "state");
+    /* this.setState({ moviesPerPage: arr, actualPage: page }); */
+    window.scrollTo(0, 0);
+  };
 
   render() {
     return (
@@ -199,13 +161,13 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           {this.state.isFetching ? (
             <h1>Loading Movies</h1>
           ) : this.state.moviesFound ? (
-            this.state.movies.map((movie) => {
+            this.state.moviesPerPage.map((movie) => {
               return (
                 <Poster
                   onClick={this.handleViewDetails}
                   key={movie.imdbID}
                   movie={movie}
-                  render={this.props.order}
+                  /* render={this.props.order} */
                 />
               );
             })
@@ -332,7 +294,7 @@ interface IPosterProps {
   onClick(imdbID: string): void;
   key: string;
   movie: any;
-  render: string;
+  /* render: string; */
 }
 
 function Poster(props: IPosterProps) {
@@ -348,10 +310,10 @@ function Poster(props: IPosterProps) {
     sethoverActivo(false);
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     sethoverActivo(false);
     setactiveLeaveAnimation(false);
-  }, [props.render]);
+  }, [props.render]); */
 
   return (
     <div

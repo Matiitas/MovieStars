@@ -19,6 +19,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
+    console.log("Didmount searchComp");
     const { searchWord } = this.props.match.params;
     this.setState({ searchWord: searchWord });
     getMoviesWithTitle(searchWord)
@@ -32,7 +33,8 @@ class Search extends Component {
       .catch((err) => console.log(err));
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  /* componentDidUpdate(prevProps, prevState) {
+    console.log("Didupdate searchComp");
     const { searchWord } = this.props.match.params;
     if (prevState.searchWord !== searchWord) {
       this.setState({ searchWord: searchWord, isFetching: true });
@@ -46,14 +48,14 @@ class Search extends Component {
         })
         .catch((err) => console.log(err));
     }
-  }
+  } */
 
   handleOrder = (value) => {
     this.setState({ order: value });
   };
 
   render() {
-    /* const { searchWord, page } = this.props.match.params; */
+    /* const { searchWord } = this.props.match.params; */
     return (
       <div>
         <NavBar />
