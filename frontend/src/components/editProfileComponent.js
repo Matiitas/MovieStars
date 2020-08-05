@@ -121,11 +121,11 @@ class EditProfile extends Component {
   render() {
     return (
       <div>
+        <Navbar />
         {this.state.isFetching ? (
           <Loading />
         ) : (
           <React.Fragment>
-            <Navbar />
             <div
               style={{
                 position: "relative",
@@ -189,7 +189,6 @@ class EditProfile extends Component {
                 <input type="submit" value="Edit" />
               </form>
             </div>
-            <Footer />
           </React.Fragment>
         )}
         <Footer />

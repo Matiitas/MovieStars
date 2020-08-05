@@ -13,6 +13,16 @@ async function getMoviesFromDatabaseWithTitle(title) {
   }
 }
 
+async function getMovieWithImdbIDFromDatabase(imdbID) {
+  try {
+    const movie = await Movie.find({ imdbID });
+    return movie;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+}
+
 async function getMoviesImdbID(searchWord, page) {
   const movies = await axios({
     method: "get",
@@ -52,6 +62,20 @@ module.exports = {
       res.status(200).json({ movies });
     } catch (e) {
       res.status(404).json({ message: "No movies in DB", error: e });
+    }
+  },
+  getMovieByImdbIDFromDatabase: async (req, res) => {
+    try {
+      const { imdbID } = req.query;
+      const movie = await getMovieWithImdbIDFromDatabase(imdbID);
+      if (movie.length > 0) {
+        res.status(200).json({ movie });
+      } else {
+        res.status(404).json({ message: "No movie found" });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ message: "No movie found", error: e });
     }
   },
   getMoviesForHome: async (req, res) => {

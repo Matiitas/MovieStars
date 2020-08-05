@@ -10,7 +10,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recommend: false,
+      recommend: true,
       isFetching: true,
       thriller: undefined,
       bizarre: undefined,
@@ -64,11 +64,9 @@ class Home extends Component {
         bizarre: bizarre.data.movies,
         isFetching: false,
       });
-      if (thriller.length > 0 || thriller.length > 0 || thriller.length > 0) {
-        this.setState({ recommend: true });
-      }
     } catch (e) {
       console.log(e);
+      this.setState({ recommend: false });
     }
   };
 

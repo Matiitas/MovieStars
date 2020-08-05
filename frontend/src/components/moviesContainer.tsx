@@ -174,7 +174,9 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
           ) : (
             <h1>No results found!</h1>
           )}
-          {!this.state.moviesFound || this.state.isFetching ? null : (
+          {!this.state.moviesFound ||
+          this.state.isFetching ||
+          this.state.cantPages <= 1 ? null : (
             <RenderPagination
               actualPage={this.state.actualPage}
               cantPages={this.state.cantPages}

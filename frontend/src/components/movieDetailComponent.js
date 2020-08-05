@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Navbar from "./navbar";
 import "../assets/styles/details.css";
-/* import { getMovieByID } from "../utils/omdbRequest"; */
 import Loading from "./loading";
 import {
   getFavoriteMovies,
   addToFavorites,
   deleteFromFavorites,
+  getMovieByImdbID,
 } from "../utils/backendRequest";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -25,61 +25,65 @@ class MovieDetail extends Component {
   }
 
   componentDidMount() {
-    const { isAuthenticated } = this.props.auth;
-    const { imdbID } = this.props.match.params;
-    if (isAuthenticated) {
-      getFavoriteMovies()
-        .then((response) => {
-          if (response.data.movies.includes(imdbID)) {
-            this.setState({ alreadyFavorite: true });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    /* getMovieByID(imdbID)
-      .then((res) => {
-        console.log("Esta es la res", res);
-        this.setState({ movie: res.data, isFetching: false });
-      })
-      .catch((err) => {
-        console.log(err);
-      }); */
+    this.fetchMovie();
+    this.checkIfFavorite();
   }
 
-  handleClickFavorites = () => {
-    const { imdbID } = this.props.match.params;
-    const { isAuthenticated } = this.props.auth;
-    if (isAuthenticated) {
-      addToFavorites(imdbID)
-        .then((response) => {
-          console.log("Esta es la respuesta: ", response.data);
-          this.setState({ alreadyFavorite: true });
-        })
-        .catch((err) => {
-          console.log("Error: ", err);
-        });
-    } else {
-      this.setState({ showPopup: true });
+  fetchMovie = async () => {
+    try {
+      const { imdbID } = this.props.match.params;
+      const movie = await getMovieByImdbID(imdbID);
+      if (movie.data.movie) {
+        this.setState(
+          { movie: movie.data.movie[0], isFetching: false },
+          () => this.checkIfFavorite
+        );
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  handleDeleteFavorite = () => {
-    const { imdbID } = this.props.match.params;
-    const { isAuthenticated } = this.props.auth;
-    if (isAuthenticated) {
-      deleteFromFavorites(imdbID)
-        .then((response) => {
-          console.log("Esta es la respuesta: ", response.data.message);
-          this.setState({ alreadyFavorite: false });
-        })
-        .catch((err) => {
-          console.log("Error: ", err);
-        });
-    } else {
-      console.log("No esta logueado ameo");
+  checkIfFavorite = async () => {
+    try {
+      const { isAuthenticated } = this.props.auth;
+      if (isAuthenticated) {
+        const favorites = await getFavoriteMovies();
+        if (favorites.data.movies.includes(this.state.movie._id)) {
+          this.setState({ alreadyFavorite: true });
+        }
+        console.log("Este es el res: ", favorites.data.movies);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  handleClickFavorites = async () => {
+    try {
+      const { isAuthenticated } = this.props.auth;
+      if (isAuthenticated) {
+        const result = await addToFavorites(this.state.movie._id);
+        console.log("El result del clickFav: ", result);
+        this.setState({ alreadyFavorite: true });
+      } else {
+        this.setState({ showPopup: true });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  handleDeleteFavorite = async () => {
+    try {
+      const { isAuthenticated } = this.props.auth;
+      if (isAuthenticated) {
+        const result = await deleteFromFavorites(this.state.movie._id);
+        console.log("El result del clickDel: ", result);
+        this.setState({ alreadyFavorite: false });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -106,8 +110,8 @@ class MovieDetail extends Component {
                   <div className="image-container">
                     <img
                       className="poster-img"
-                      src={this.state.movie.Poster}
-                      alt={this.state.movie.Title}
+                      src={this.state.movie.poster}
+                      alt={this.state.movie.title}
                     />
                     {this.state.alreadyFavorite && isAuthenticated ? (
                       <button
@@ -151,30 +155,30 @@ function renderListMoreInfo(movie) {
     <ul className="movie-details-list">
       <li>
         <h5>Plot:</h5>
-        <h6> {movie.Plot ? movie.Plot : "N/A"}</h6>
+        <h6> {movie.plot ? movie.plot : "N/A"}</h6>
       </li>
       <li>
         <h5>Writer:</h5>
 
-        <h6> {movie.Writer ? movie.Writer : "N/A"}</h6>
+        <h6> {movie.writer ? movie.writer : "N/A"}</h6>
       </li>
       <li>
         <h5>Production:</h5>
 
-        <h6> {movie.Production ? movie.Production : "N/A"}</h6>
+        <h6> {movie.production ? movie.production : "N/A"}</h6>
       </li>
       <li>
         <h5>Language:</h5>
 
-        <h6> {movie.Language ? movie.Language : "N/A"}</h6>
+        <h6> {movie.language ? movie.language : "N/A"}</h6>
       </li>
       <li>
         <h5>Rated:</h5>
-        <h6> {movie.Rated ? movie.Rated : "N/A"}</h6>
+        <h6> {movie.rated ? movie.rated : "N/A"}</h6>
       </li>
       <li>
         <h5>Awards:</h5>
-        <h6> {movie.Awards ? movie.Awards : "N/A"}</h6>
+        <h6> {movie.awards ? movie.awards : "N/A"}</h6>
       </li>
       <li>
         <h5>IMDB:</h5>
@@ -182,11 +186,11 @@ function renderListMoreInfo(movie) {
       </li>
       <li>
         <h5>Rotten Tomatoes:</h5>
-        <h6> {movie.Ratings[1] ? movie.Ratings[1].Value : "N/A"}</h6>
+        <h6> {movie.ratings[1] ? movie.ratings[1].Value : "N/A"}</h6>
       </li>
       <li>
         <h5>Metacritic:</h5>
-        <h6> {movie.Metascore ? movie.Metascore : "N/A"}</h6>
+        <h6> {movie.ratings[2] ? movie.ratings[2].Value : "N/A"}</h6>
       </li>
     </ul>
   );
@@ -200,31 +204,31 @@ function renderListResumen(movie) {
       </li>
       <li>
         <h5>Year:</h5>
-        <h6> {movie.Year ? movie.Year : "N/A"}</h6>
+        <h6> {movie.year ? movie.year : "N/A"}</h6>
       </li>
       <li>
         <h5>Duration:</h5>
 
-        <h6> {movie.Runtime ? movie.Runtime : "N/A"}</h6>
+        <h6> {movie.runtime ? movie.runtime : "N/A"}</h6>
       </li>
       <li>
         <h5>Genre:</h5>
 
-        <h6> {movie.Genre ? movie.Genre : "N/A"}</h6>
+        <h6> {movie.genre ? movie.genre : "N/A"}</h6>
       </li>
       <li>
         <h5>Director:</h5>
 
-        <h6> {movie.Director ? movie.Director : "N/A"}</h6>
+        <h6> {movie.director ? movie.director : "N/A"}</h6>
       </li>
       <li>
         <h5>Actors:</h5>
-        <h6> {movie.Actors ? movie.Actors : "N/A"}</h6>
+        <h6> {movie.actors ? movie.actors : "N/A"}</h6>
       </li>
       <li>
         <h5>Country:</h5>
 
-        <h6> {movie.Country ? movie.Country : "N/A"}</h6>
+        <h6> {movie.country ? movie.country : "N/A"}</h6>
       </li>
       <li>
         <h5>IMDB:</h5>

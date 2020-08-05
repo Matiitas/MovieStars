@@ -3,6 +3,7 @@ const {
   getAllMoviesWithTitle,
   getAllMovies,
   getMoviesForHome,
+  getMovieByImdbIDFromDatabase,
 } = require("../controllers/moviesController");
 
 //get all the movies in db
@@ -12,6 +13,9 @@ router.route("/").get(getAllMovies);
 router.route("/id").get(async (req, res) => {
   console.log("Esta es la req.query.movieid: ", req.query.movieid);
 });
+
+//get movie for imdbID from DB
+router.route("/imdbID").get(getMovieByImdbIDFromDatabase);
 
 //get all movies for title and add to db
 router.route("/title").get(getAllMoviesWithTitle);

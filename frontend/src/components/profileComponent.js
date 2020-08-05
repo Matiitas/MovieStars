@@ -6,7 +6,7 @@ import MoviesContainer from "./moviesContainer";
 import axios from "axios";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-/* import { getMoviesByArrayOfID } from "../utils/omdbRequest"; */
+import { getLoggedUserData } from "../utils/backendRequest";
 import { ImageIcon } from "@primer/octicons-react";
 import Loading from "./loading";
 import Footer from "./footer";
@@ -18,37 +18,22 @@ class Profile extends Component {
       user: undefined,
       isGuest: true,
       isFetching: true,
-      movies: undefined,
     };
   }
 
-  async componentDidMount() {
-    try {
-      const { userId } = this.props.match.params;
-      if (!userId) {
-        const user = await axios.get("http://localhost:5000/api/v1/users/me");
-        if (user) {
-          this.setState({ user: user.data });
-          console.log("state", user.data);
-          /* getMoviesByArrayOfID(user.data.movies)
-            .then((response) => {
-              this.setState({
-                movies: response,
-                isFetching: false,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              this.setState({ isFetching: false });
-            }); */
-        }
-      } else {
-        //hago algo si entra un guest
-      }
-    } catch (e) {
-      console.log("Algo paso en el try que no se pudo realizar", e);
-    }
+  componentDidMount() {
+    this.fetchUserData();
   }
+
+  fetchUserData = async () => {
+    try {
+      const user = await getLoggedUserData();
+      console.log("Este es el user.data", user.data);
+      this.setState({ user: user.data, isFetching: false });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   handleImageChange = (event) => {
     const bodyFormData = new FormData();
@@ -148,16 +133,16 @@ class Profile extends Component {
                   </label>
                 </div>
               </div>
-              {this.state.movies ? (
+              {this.state.user.movies.length > 0 ? (
                 <React.Fragment>
                   {" "}
                   <div className="favorite-movies">
                     <span>Favorite Movies</span>
                   </div>
-                  <MoviesContainer movies={this.state.movies} />
+                  <MoviesContainer movies={this.state.user.movies} />
                 </React.Fragment>
               ) : (
-                <div className="favorite-movies">
+                <div className="favorite-movies text-center">
                   <span>You don't have favorite movies</span>
                 </div>
               )}

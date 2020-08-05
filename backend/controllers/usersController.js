@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const Movie = require("../models/movieModel");
 
 const omdbURL = "http://www.omdbapi.com/?apikey=";
 
@@ -77,7 +78,7 @@ module.exports = {
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
 
-  getUser: (req, res) => {
+  /* getUser: (req, res) => {
     User.findById(req.userId)
       .then((response) => {
         const user = {
@@ -90,13 +91,33 @@ module.exports = {
           country: response.country,
           birthDate: response.birthDate,
         };
-        res.json(user);
+        res.status(200).json(user);
       })
       .catch((err) => {
         res.status(404).json(err);
       });
+  }, */
+  getUser: async (req, res) => {
+    try {
+      const result = await User.findById({ _id: req.userId }).populate(
+        "movies"
+      );
+      const user = {
+        movies: result.movies,
+        username: result.username,
+        email: result.email,
+        profileImage: result.profileImage,
+        name: result.name,
+        city: result.city,
+        country: result.country,
+        birthDate: result.birthDate,
+      };
+      res.status(200).json(user);
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ message: "No user found", error: e });
+    }
   },
-
   updateUserImage: (req, res) => {
     User.findById({ _id: req.userId })
       .then((user) => {
@@ -142,19 +163,25 @@ module.exports = {
       });
   },
   //si la movie ya esta en los favoritos del usuario no se agrega
-  addMovie: (req, res) => {
-    User.updateOne(
-      { _id: req.userId },
-      { $addToSet: { movies: req.query.movieID } }
-    )
-      .then((result) => {
-        console.log("Se agrego la movie", result);
-        res.json("Movie add");
-      })
-      .catch((err) => {
-        console.log("Error: ", err);
-        res.status(404).json("User not found");
+  addMovie: async (req, res) => {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.userId,
+        { $push: { movies: req.query.movieID } },
+        { new: true, useFindAndModify: false }
+      );
+      const movie = await Movie.findByIdAndUpdate(
+        req.query.movieID,
+        { $push: { users: user._id } },
+        { new: true, useFindAndModify: false }
+      );
+      res.status(200).json({
+        message: "Added to favorites",
       });
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ message: "User not found", error: e });
+    }
   },
 
   //?myparam1=${abc_energyprogramid}
@@ -165,7 +192,7 @@ module.exports = {
           "IdDeLaMovie2"
         ] */
 
-  getFavoriteMoviesId: async (req, res) => {
+  getFavoriteMovies: async (req, res) => {
     user = await User.findById({ _id: req.userId });
     if (user) {
       res.json({ movies: user.movies });
@@ -173,49 +200,31 @@ module.exports = {
       res.status(404).json("User not found");
     }
   },
-  getMoviesDetails: async (req, res) => {
-    user = await User.findById({ _id: req.userId });
-    if (user) {
-      var promises = [];
-      var result = [];
-      user.movies.forEach((movieId) => {
-        promises.push(
-          axios.get(
-            omdbURL + process.env.OMDB_KEY + "&i=" + movieId + "&plot=full"
-          )
-        );
-      });
-      Promise.all(promises)
-        .then((movies) => {
-          movies.forEach((movie) => {
-            console.log("Movie encontrada: ", movie.data.Title);
-            if (movie.data.Response === "True") {
-              result.push(movie.data);
-            }
-          });
-          res.json({ movies: result });
-        })
-        .catch((err) => {
-          console.log("Error: ", err);
-        });
-    } else {
-      res.status(404).json("User not found");
-    }
-  },
+  getMoviesDetails: async (req, res) => {},
   /////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
-  deleteMovie: (req, res) => {
-    User.updateOne(
-      { _id: req.userId },
-      { $pullAll: { movies: [req.query.movieID] } }
-    )
-      .then((result) => {
-        console.log("Este es el resultado si lo encontro: ", result);
-        res.json({ message: "Removed" });
-      })
-      .catch((err) => {
-        console.log("Error", err);
-        res.status(404).json(err);
-      });
+  deleteMovie: async (req, res) => {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.userId,
+        {
+          $pullAll: { movies: [req.query.movieID] },
+        },
+        { new: true, useFindAndModify: false }
+      );
+      const movie = await Movie.findByIdAndUpdate(
+        req.query.movieID,
+        {
+          $pullAll: { users: [req.userId] },
+        },
+        { new: true, useFindAndModify: false }
+      );
+      res.status(200).json({ message: "Deleted from favorites" });
+    } catch (e) {
+      console.log(e);
+      res
+        .status(404)
+        .json({ message: "The operation could not be performed", error: e });
+    }
   },
 };

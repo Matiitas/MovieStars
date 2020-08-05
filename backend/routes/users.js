@@ -10,7 +10,7 @@ const {
   addMovie,
   getMoviesDetails,
   deleteMovie,
-  getFavoriteMoviesId,
+  getFavoriteMovies,
   updateUser,
   updateUserImage,
 } = require("../controllers/usersController");
@@ -56,17 +56,17 @@ router
 
 router.route("/login").post(validateEmail, loginUser);
 
-//Devuelvo datos del usuario logueado
+//Devuelvo datos del usuario logueado, mas favorite movies populate
 router.route("/me").get(auth, getUser);
 
 //Agrega una movie al usuario
 router.route("/movies").post(auth, addMovie);
 
-//Devuelve todas las movies del usuario
-router.route("/movies").get(auth, getFavoriteMoviesId);
+//Devuelve el _id de todas las movies del usuario
+router.route("/movies").get(auth, getFavoriteMovies);
 
-//Devuelve los detalles de todas las movies favoritas del user
-router.route("/profile/movies").get(auth, getMoviesDetails);
+/* //Devuelve los detalles de todas las movies favoritas del user
+router.route("/profile/movies").get(auth, getMoviesDetails); */
 
 router.route("/profile/edit").post(auth, updateUser);
 
