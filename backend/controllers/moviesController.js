@@ -9,7 +9,7 @@ async function getMoviesFromDatabaseWithTitle(title) {
     return movies;
   } catch (e) {
     console.log(e);
-    return [];
+    return;
   }
 }
 
@@ -52,6 +52,22 @@ module.exports = {
       res.status(200).json({ movies });
     } catch (e) {
       res.status(404).json({ message: "No movies in DB", error: e });
+    }
+  },
+  getMoviesForHome: async (req, res) => {
+    try {
+      const moviesForHome = [];
+      const arr = req.body.arrayOfImdbID;
+      for (let i = 0; i < arr.length; i++) {
+        const movie = await Movie.find({ imdbID: arr[i] });
+        if (movie.length > 0) {
+          moviesForHome.push(movie[0]);
+        }
+      }
+      res.status(200).json({ movies: moviesForHome });
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ message: "No movies found", error: e });
     }
   },
   getAllMoviesWithTitle: async (req, res) => {
@@ -133,65 +149,6 @@ module.exports = {
         } catch (e) {
           console.log("Error del catch en moviesPromises: ", e);
         }
-        /* Promise.all(promises.map((p) => p.catch(() => undefined)))
-          .then(async (movies) => {
-            movies.forEach(async (movie) => {
-              if (movie && movie.status === 200) {
-                let {
-                  Actors,
-                  Title,
-                  Year,
-                  Runtime,
-                  Writer,
-                  Director,
-                  Production,
-                  Genre,
-                  Plot,
-                  Language,
-                  Country,
-                  Awards,
-                  Ratings,
-                  Poster,
-                  imdbID,
-                  imdbRating,
-                } = movie.data;
-                newMovie = new Movie({
-                  actors: Actors,
-                  title: Title,
-                  year: Year,
-                  runtime: Runtime,
-                  writer: Writer,
-                  director: Director,
-                  production: Production,
-                  genre: Genre,
-                  plot: Plot,
-                  language: Language,
-                  country: Country,
-                  awards: Awards,
-                  ratings: Ratings,
-                  poster: Poster,
-                  imdbID: imdbID,
-                  imdbRating: imdbRating,
-                });
-                result.push(newMovie);
-              }
-            });
-            try {
-              const addedMovies = await Movie.insertMany(result, {
-                ordered: false,
-              });
-              console.log("EN el try");
-              res.status(200).json({ movies: addedMovies });
-            } catch (e) {
-              console.log("EN el catch");
-              res
-                .status(500)
-                .json({ message: "Can't insert in database", error: e });
-            }
-          })
-          .catch((err) => {
-            res.status(500).json({ message: "Cant do promises", error: err });
-          }); */
       } else {
         console.log("No movies found");
         res.status(404).json({ message: "No movies found" });

@@ -33,23 +33,6 @@ class Search extends Component {
       .catch((err) => console.log(err));
   }
 
-  /* componentDidUpdate(prevProps, prevState) {
-    console.log("Didupdate searchComp");
-    const { searchWord } = this.props.match.params;
-    if (prevState.searchWord !== searchWord) {
-      this.setState({ searchWord: searchWord, isFetching: true });
-      getMoviesWithTitle(searchWord)
-        .then((result) => {
-          this.setState({
-            movies: result.data.movies,
-            isFetching: false,
-            order: "normal",
-          });
-        })
-        .catch((err) => console.log(err));
-    }
-  } */
-
   handleOrder = (value) => {
     this.setState({ order: value });
   };

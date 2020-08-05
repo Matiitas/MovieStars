@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {
   getAllMoviesWithTitle,
   getAllMovies,
+  getMoviesForHome,
 } = require("../controllers/moviesController");
 
 //get all the movies in db
@@ -14,5 +15,8 @@ router.route("/id").get(async (req, res) => {
 
 //get all movies for title and add to db
 router.route("/title").get(getAllMoviesWithTitle);
+
+//get movies for home
+router.route("/recommended").post(getMoviesForHome);
 
 module.exports = router;

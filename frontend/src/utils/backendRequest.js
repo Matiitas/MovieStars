@@ -20,9 +20,17 @@ const getMoviesWithTitle = (title) => {
   return axios.get("http://localhost:5000/api/v1/movies/title?title=" + title);
 };
 
+const getMoviesForHome = (arr) => {
+  const data = {
+    arrayOfImdbID: arr,
+  };
+  return axios.post("http://localhost:5000/api/v1/movies/recommended", data);
+};
+
 export {
   getFavoriteMovies,
   addToFavorites,
   deleteFromFavorites,
   getMoviesWithTitle,
+  getMoviesForHome,
 };
