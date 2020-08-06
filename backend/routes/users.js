@@ -8,7 +8,6 @@ const {
   validateUsername,
   validateEmail,
   addMovie,
-  getMoviesDetails,
   deleteMovie,
   getFavoriteMovies,
   updateUser,
@@ -48,7 +47,6 @@ const upload = multer({
 
 ////////////////////////////////////////////
 // LA RUTA ES http://localhost:5000/api/v1/users
-/* router.route("/").get(auth, getUsers); */
 
 router
   .route("/register")

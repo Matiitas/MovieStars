@@ -15,15 +15,15 @@ export function login(data) {
     return axios
       .post("http://localhost:5000/api/v1/users/login", data)
       .then((response) => {
-        if (response.data.error) {
-          setAuthorizationToken(null);
-        } else {
-          const token = response.data.token;
-          localStorage.setItem("jwtToken", token);
-          setAuthorizationToken(token);
-          dispatch(setCurrentUser(jwt.decode(token)));
-        }
+        const token = response.data.token;
+        localStorage.setItem("jwtToken", token);
+        setAuthorizationToken(token);
+        dispatch(setCurrentUser(jwt.decode(token)));
         return response;
+      })
+      .catch((e) => {
+        setAuthorizationToken(null);
+        throw e;
       });
   };
 }

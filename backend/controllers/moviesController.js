@@ -61,7 +61,7 @@ module.exports = {
       const movies = await Movie.find({});
       res.status(200).json({ movies });
     } catch (e) {
-      res.status(404).json({ message: "No movies in DB", error: e });
+      res.status(404).json({ message: "No movies in DB" });
     }
   },
   getMovieByImdbIDFromDatabase: async (req, res) => {
@@ -75,7 +75,7 @@ module.exports = {
       }
     } catch (e) {
       console.log(e);
-      res.status(404).json({ message: "No movie found", error: e });
+      res.status(404).json({ message: "No movie found" });
     }
   },
   getMoviesForHome: async (req, res) => {
@@ -91,7 +91,7 @@ module.exports = {
       res.status(200).json({ movies: moviesForHome });
     } catch (e) {
       console.log(e);
-      res.status(404).json({ message: "No movies found", error: e });
+      res.status(404).json({ message: "No movies found" });
     }
   },
   getAllMoviesWithTitle: async (req, res) => {
@@ -169,9 +169,11 @@ module.exports = {
             res.status(200).json({ movies: addedMovies });
           } catch (e) {
             console.log("Error del catch en inserMany: ", e);
+            res.status(500).json({ message: "Can't add movies to Database" });
           }
         } catch (e) {
           console.log("Error del catch en moviesPromises: ", e);
+          res.status(500).json({ message: "Can't get movies from api" });
         }
       } else {
         console.log("No movies found");

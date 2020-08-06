@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../assets/styles/register.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
 
 class Register extends Component {
   constructor(props) {
@@ -11,7 +12,16 @@ class Register extends Component {
       username: "",
       email: "",
       password: "",
-      error: "",
+      showError: false,
+      errorIndex: undefined,
+      errors: [
+        "Something went wrong, try again.",
+        "Username too short, at least 4 characters.",
+        "Username already taken.",
+        "Invalidad email.",
+        "Email already taken.",
+        "Password too short, at least 8 characters.",
+      ],
     };
   }
 
@@ -28,24 +38,54 @@ class Register extends Component {
   };
 
   handleSubmit = (event) => {
-    //cuando envian el form se acciona esto
-    event.preventDefault(); //prevent html form submit comportamiento
+    event.preventDefault();
+    this.setState({ showError: false, errorIndex: undefined });
     axios
       .post("http://localhost:5000/api/v1/users/register", this.state)
       .then((response) => {
-        console.log(response.data);
-        if (response.data.error) {
-          this.setState({ error: response.data.error, password: "" });
-        } else {
-          this.props.history.push("/login");
-        }
+        this.props.history.push("/login");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        let errorIndex = 0;
+        switch (error.response.data.message) {
+          case "Username short":
+            errorIndex = 1;
+            break;
+          case "Username taken":
+            errorIndex = 2;
+            break;
+          case "Invalid email":
+            errorIndex = 3;
+            break;
+          case "Email taken":
+            errorIndex = 4;
+            break;
+          case "Password too short":
+            errorIndex = 5;
+            break;
+          default:
+            errorIndex = 0;
+            break;
+        }
+        this.setState({ errorIndex, showError: true, password: "" });
+      });
   };
 
   render() {
     return (
       <div className="outter-box">
+        {this.state.showError ? (
+          <Alert
+            variant="danger"
+            onClose={() => this.setState({ showError: false })}
+            dismissible
+          >
+            <Alert.Heading>
+              {" "}
+              {this.state.errors[this.state.errorIndex]}{" "}
+            </Alert.Heading>
+          </Alert>
+        ) : null}
         <div>
           Register
           <form onSubmit={this.handleSubmit}>

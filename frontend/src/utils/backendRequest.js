@@ -44,7 +44,6 @@ const getLoggedUserData = () => {
 export {
   getFavoriteMovies,
   addToFavorites,
-  /* getFavoriteMoviesWithDetailsForProfile, */
   deleteFromFavorites,
   getMoviesWithTitle,
   getMoviesForHome,

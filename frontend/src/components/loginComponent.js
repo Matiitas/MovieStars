@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/authActions";
 import PropTypes from "prop-types";
+import Alert from "react-bootstrap/Alert";
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: "", password: "", error: "" };
+    this.state = { email: "", password: "", showError: false };
   }
 
   handleChangeEmail = (event) => {
@@ -24,19 +25,25 @@ class Login extends Component {
     this.props
       .login(this.state)
       .then((response) => {
-        console.log(response.data);
-        if (response.data.error) {
-          this.setState({ error: response.data.error, password: "" });
-        } else {
-          this.props.history.push("/");
-        }
+        this.props.history.push("/");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        this.setState({ showError: true, password: "" });
+      });
   };
 
   render() {
     return (
       <div className="outter-box">
+        {this.state.showError ? (
+          <Alert
+            variant="danger"
+            onClose={() => this.setState({ showError: false })}
+            dismissible
+          >
+            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          </Alert>
+        ) : null}
         <div>
           Login
           <form onSubmit={this.handleSubmit}>
