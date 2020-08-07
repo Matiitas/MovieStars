@@ -38,7 +38,7 @@ const getMovieByImdbID = (imdbID) => {
 };
 
 const getLoggedUserData = () => {
-  return axios.get("http://localhost:5000/api/v1/users/me");
+  return axios.get("http://localhost:5000/api/v1/users/profile");
 };
 
 export {

@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   addUser: (req, res) => {
-    console.log(req.body);
     if (req.body.password.length < 8) {
       res.status(400).json({ message: "Password too short" });
     } else {
@@ -27,7 +26,6 @@ module.exports = {
   },
   loginUser: async (req, res) => {
     try {
-      console.log(req.body);
       user = await User.findOne({ email: req.body.email });
       if (user) {
         valido = bcrypt.compareSync(req.body.password, user.password);
@@ -135,7 +133,6 @@ module.exports = {
       });
   },
   updateUser: (req, res) => {
-    console.log("Este es el req.body: ", req.body);
     User.findById({ _id: req.userId })
       .then((user) => {
         user.name = req.body.name;

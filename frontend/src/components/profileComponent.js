@@ -28,7 +28,6 @@ class Profile extends Component {
   fetchUserData = async () => {
     try {
       const user = await getLoggedUserData();
-      console.log("Este es el user.data", user.data);
       this.setState({ user: user.data, isFetching: false });
     } catch (e) {
       console.log(e);
@@ -44,7 +43,6 @@ class Profile extends Component {
         bodyFormData
       )
       .then((response) => {
-        console.log("Response despues de cambiar img: ", response.data);
         let user = this.state.user;
         user.profileImage = response.data.newProfileImageName;
         this.setState({ user: user });

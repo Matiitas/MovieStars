@@ -49,8 +49,18 @@
   align-items: center;
 }
 
-.input-border {
+.input-border-valid {
   border: solid 2px black;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  -webkit-border-radius: 0.4rem;
+  -moz-border-radius: 0.4rem;
+  -ms-border-radius: 0.4rem;
+  -o-border-radius: 0.4rem;
+}
+
+.input-border-invalid {
+  border: solid 2px red;
   border-radius: 0.4rem;
   overflow: hidden;
   -webkit-border-radius: 0.4rem;

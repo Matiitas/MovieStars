@@ -98,7 +98,6 @@ function SearchBar(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Este es lo que buscas: ", inputSearch);
     props.onSearch(inputSearch);
   };
 
@@ -113,7 +112,10 @@ function SearchBar(props) {
             setInputSearch(e.target.value);
           }}
         />
-        <button type="submit">Search</button>
+        <button style={{ display: "flex" }} type="submit">
+          {" "}
+          <span style={{ fontSize: "20px" }}>Search</span>{" "}
+        </button>
       </form>
     </li>
   );

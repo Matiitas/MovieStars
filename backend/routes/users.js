@@ -55,7 +55,7 @@ router
 router.route("/login").post(validateEmail, loginUser);
 
 //Devuelvo datos del usuario logueado, mas favorite movies populate
-router.route("/me").get(auth, getUser);
+router.route("/profile").get(auth, getUser);
 
 //Agrega una movie al usuario
 router.route("/movies").post(auth, addMovie);

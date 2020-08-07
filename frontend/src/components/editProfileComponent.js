@@ -3,12 +3,13 @@ import Navbar from "./navbar";
 import axios from "axios";
 import Footer from "./footer";
 import Loading from "./loading";
+import { getLoggedUserData } from "../utils/backendRequest";
+import { Link } from "react-router-dom";
 
 class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: undefined,
       isFetching: true,
       name: "",
       birthDate: "",
@@ -24,21 +25,23 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/api/v1/users/me")
-      .then((response) => {
-        this.setState({ user: response.data, isFetching: false });
-        this.setState({
-          name: this.state.user.name,
-          birthDate: this.state.user.birthDate,
-          country: this.state.user.country,
-          city: this.state.user.city,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetchUserData();
   }
+
+  fetchUserData = async () => {
+    try {
+      const user = await getLoggedUserData();
+      this.setState({
+        isFetching: false,
+        name: user.data.name,
+        birthDate: user.data.birthDate,
+        country: user.data.country,
+        city: user.data.city,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   handleNameChange = (event) => {
     this.setState({ name: event.target.value });
@@ -77,8 +80,6 @@ class EditProfile extends Component {
 
     const formInputs = {};
 
-    console.log("valid name: ", validName);
-
     if (validName) {
       formInputs.name = name;
       errors.name = false;
@@ -99,17 +100,13 @@ class EditProfile extends Component {
     }
 
     formInputs.birthDate = birthDate;
-    this.setState({ errors: errors });
-
-    console.log("State", this.state);
 
     if (!validName || !validCity || !validCountry) {
-      console.log("Input invalido");
+      this.setState({ errors: errors });
     } else {
       axios
         .post("http://localhost:5000/api/v1/users/profile/edit", formInputs)
         .then((response) => {
-          console.log(response);
           this.props.history.push("/profile");
         })
         .catch((err) => {
@@ -125,71 +122,134 @@ class EditProfile extends Component {
         {this.state.isFetching ? (
           <Loading />
         ) : (
-          <React.Fragment>
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              Edit Profile
-              <form
-                onSubmit={this.handleSubmit}
-                style={{ position: "relative", top: "200px" }}
-              >
-                <div className="form-group row">
-                  <label>Name</label>
-                  <input
-                    /* className="form-control is-invalid" */
-                    maxLength="32"
-                    type="text"
-                    onChange={this.handleNameChange}
-                    value={this.state.name ? this.state.name : ""}
-                    placeholder="Name"
-                  />
-                  {/* <div className="invalid-feedback">
-                  Please provide a valid city.
-                </div> */}
-                </div>
-                <div className="form-group row">
-                  <label>Birth Date</label>
-                  <input
-                    min="01-01-1900"
-                    max="01-01-2030"
-                    type="date"
-                    onChange={this.handleBirthChange}
-                    value={
-                      this.state.birthDate
-                        ? this.state.birthDate.toLocaleString().split("T")[0]
-                        : ""
-                    }
-                  />
-                </div>
-                <div className="form-group row">
-                  <label>Country</label>
-                  <input
-                    type="text"
-                    onChange={this.handleCountryChange}
-                    value={this.state.country ? this.state.country : ""}
-                    placeholder="Country"
-                  />
-                </div>
-                <div className="form-group row">
-                  <label>City</label>
-                  <input
-                    type="text"
-                    onChange={this.handleCityChange}
-                    value={this.state.city ? this.state.city : ""}
-                    placeholder="City"
-                  />
-                </div>
-                <input type="submit" value="Edit" />
-              </form>
+          <div className="container pt-5">
+            <div className="container-forms">
+              <div className="wrap-forms-box mt-5 mb-5">
+                <form onSubmit={this.handleSubmit}>
+                  <div className="form-group">
+                    <label className="font-weight-bold">Name</label>
+                    <div
+                      className={
+                        this.state.errors.name
+                          ? "input-border-invalid"
+                          : "input-border-valid"
+                      }
+                    >
+                      <input
+                        className="form-control"
+                        maxLength="32"
+                        type="text"
+                        onChange={this.handleNameChange}
+                        value={this.state.name ? this.state.name : ""}
+                      />
+                    </div>
+                    <div
+                      className="invalid-feedback"
+                      style={{
+                        display: this.state.errors.name ? "block" : "none",
+                      }}
+                    >
+                      Enter a valid name
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="font-weight-bold">Birth Date</label>
+                    <div className="input-border-valid">
+                      <input
+                        className="form-control"
+                        min="01-01-1900"
+                        max="01-01-2030"
+                        type="date"
+                        onChange={this.handleBirthChange}
+                        value={
+                          this.state.birthDate
+                            ? this.state.birthDate
+                                .toLocaleString()
+                                .split("T")[0]
+                            : ""
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="font-weight-bold">Country</label>
+                    <div
+                      className={
+                        this.state.errors.country
+                          ? "input-border-invalid"
+                          : "input-border-valid"
+                      }
+                    >
+                      <input
+                        className="form-control"
+                        type="text"
+                        onChange={this.handleCountryChange}
+                        value={this.state.country ? this.state.country : ""}
+                      />
+                    </div>
+                    <div
+                      className="invalid-feedback"
+                      style={{
+                        display: this.state.errors.country ? "block" : "none",
+                      }}
+                    >
+                      Enter a valid country
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="font-weight-bold">City</label>
+                    <div
+                      className={
+                        this.state.errors.city
+                          ? "input-border-invalid"
+                          : "input-border-valid"
+                      }
+                    >
+                      <input
+                        className="form-control"
+                        type="text"
+                        onChange={this.handleCityChange}
+                        value={this.state.city ? this.state.city : ""}
+                      />
+                    </div>
+                    <div
+                      className="invalid-feedback"
+                      style={{
+                        display: this.state.errors.city ? "block" : "none",
+                      }}
+                    >
+                      Enter a valid city
+                    </div>
+                  </div>
+                  <div
+                    className="form-group row d-flex pt-3"
+                    style={{
+                      justifyContent: "space-evenly",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div className="wrap-forms-button">
+                      <div className="border-forms-button">
+                        <input
+                          className="btn btn-light"
+                          type="submit"
+                          value="Edit"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="wrap-forms-button">
+                      <div className="border-forms-button">
+                        <Link to="/profile">
+                          <span className="btn btn-secondary">Cancel</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
-          </React.Fragment>
+          </div>
         )}
         <Footer />
       </div>

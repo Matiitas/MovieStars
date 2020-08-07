@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Component } from "react";
 import "../assets/styles/moviesContainer.css";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-/* import { getMoviesWithWord } from "../utils/omdbRequest"; */
 import Pagination from "react-bootstrap/Pagination";
 
 interface IRecipeProps extends RouteComponentProps {
@@ -38,21 +37,12 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       for (let i = 1; i <= Math.ceil(this.props.movies.length / 40); i++) {
         pageNumbers.push(i);
       }
-
-      const showPages = pageNumbers.filter((num) => {
-        return (
-          num - this.state.actualPage > -4 && num - this.state.actualPage < 4
-        );
-      });
-      console.log("showPages: ", showPages);
-      console.log("pageNumbers: ", pageNumbers);
       const orderedMovies = this.sortMovies(this.props.order);
       this.setState({ movies: orderedMovies }, () =>
         this.sliceMovies(1, "state")
       );
 
       this.setState({
-        /* movies: orderMovies, */
         cantPages: Math.ceil(this.props.movies.length / 40),
         isFetching: false,
         moviesFound: true,
@@ -75,7 +65,6 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
   sortMovies = (order: string) => {
     let arr: any[] = [];
     arr = [...this.props.movies];
-    console.log("Array es:", arr);
     switch (order) {
       case "alphabetic":
         arr.sort((a, b) => {
@@ -126,7 +115,6 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         break;
     }
     return arr;
-    /* this.setState({ movies: arr }); */
   };
 
   sliceMovies = (page: number, election: string) => {
@@ -138,9 +126,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
       case "state":
         arr = this.state.movies.slice((page - 1) * 40, page * 40);
     }
-    console.log("Slice arr: ", arr);
     this.setState({ moviesPerPage: arr, actualPage: page });
-    /* return arr; */
   };
 
   handleViewDetails = (imdbID: string) => {
@@ -148,9 +134,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
   };
 
   handlePageChange = (page: number) => {
-    console.log("Se cambio a page: ", page);
     this.sliceMovies(page, "state");
-    /* this.setState({ moviesPerPage: arr, actualPage: page }); */
     window.scrollTo(0, 0);
   };
 
@@ -167,7 +151,6 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
                   onClick={this.handleViewDetails}
                   key={movie.imdbID}
                   movie={movie}
-                  /* render={this.props.order} */
                 />
               );
             })
@@ -227,10 +210,6 @@ function RenderPagination(props: IPaginationProps) {
     } else {
       setinitialEllipsis(false);
     }
-
-    console.log("Este es el slice", showPages);
-    console.log("Esta es la pag seleccionada", props.actualPage);
-
     setshowPages(showPages);
   }, [props.actualPage, props.cantPages]);
 

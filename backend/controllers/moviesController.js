@@ -97,7 +97,6 @@ module.exports = {
   getAllMoviesWithTitle: async (req, res) => {
     const { title } = req.query;
     const moviesFromDB = await getMoviesFromDatabaseWithTitle(title);
-    console.log("Movies from db length: ", moviesFromDB.length);
     if (moviesFromDB.length > 0) {
       res.status(200).json({ movies: moviesFromDB });
     } else {
@@ -138,6 +137,7 @@ module.exports = {
                 Awards,
                 Ratings,
                 Poster,
+                Rated,
                 imdbID,
                 imdbRating,
               } = movie.data;
@@ -151,6 +151,7 @@ module.exports = {
                 production: Production,
                 genre: Genre,
                 plot: Plot,
+                rated: Rated,
                 language: Language,
                 country: Country,
                 awards: Awards,
@@ -168,7 +169,7 @@ module.exports = {
             });
             res.status(200).json({ movies: addedMovies });
           } catch (e) {
-            console.log("Error del catch en inserMany: ", e);
+            console.log("Error del catch en insertMany: ", e);
             res.status(500).json({ message: "Can't add movies to Database" });
           }
         } catch (e) {

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import NavBar from "./navbar";
 import OrderBar from "./orderBar";
 import MoviesContainer from "./moviesContainer";
-import { getAllMoviesWithWord } from "../utils/omdbRequest";
 import { getMoviesWithTitle } from "../utils/backendRequest";
 import Footer from "./footer";
 import Loading from "./loading";
@@ -12,14 +11,13 @@ class Search extends Component {
     super(props);
     this.state = {
       order: "normal",
-      movies: undefined,
+      movies: [],
       isFetching: true,
       searchWord: "",
     };
   }
 
   componentDidMount() {
-    console.log("Didmount searchComp");
     const { searchWord } = this.props.match.params;
     this.setState({ searchWord: searchWord });
     getMoviesWithTitle(searchWord)
@@ -27,10 +25,11 @@ class Search extends Component {
         this.setState({
           movies: result.data.movies,
           isFetching: false,
-          order: "normal",
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ isFetching: false });
+      });
   }
 
   handleOrder = (value) => {

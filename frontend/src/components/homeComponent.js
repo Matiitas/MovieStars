@@ -57,16 +57,23 @@ class Home extends Component {
       const thriller = await getMoviesForHome(this.state.recommendedThriller);
       const cult = await getMoviesForHome(this.state.recommendedCult);
       const bizarre = await getMoviesForHome(this.state.recommendedBizarre);
-      console.log("Thrillerssdasdsads: ", thriller.data.movies);
-      this.setState({
-        thriller: thriller.data.movies,
-        cult: cult.data.movies,
-        bizarre: bizarre.data.movies,
-        isFetching: false,
-      });
+      if (
+        thriller.data.movies.length > 0 ||
+        cult.data.movies.length > 0 ||
+        bizarre.data.movies.length > 0
+      ) {
+        this.setState({
+          thriller: thriller.data.movies,
+          cult: cult.data.movies,
+          bizarre: bizarre.data.movies,
+          isFetching: false,
+        });
+      } else {
+        this.setState({ recommend: false, isFetching: false });
+      }
     } catch (e) {
       console.log(e);
-      this.setState({ recommend: false });
+      this.setState({ recommend: false, isFetching: false });
     }
   };
 
@@ -80,17 +87,17 @@ class Home extends Component {
           <React.Fragment>
             <div className="welcome-message">
               <div className="welcome-container">
-                <h1>
+                <h2>
                   Welcome to MovieStars, a page to search for the movies which
                   you want to know about.
-                </h1>
+                </h2>
               </div>
             </div>
             <div className="welcome-message">
               <div className="welcome-container">
-                <h2>
+                <h3>
                   Down here are some movies that i recommend, enjoy yourself.
-                </h2>
+                </h3>
               </div>
             </div>
             <div className="arrow-wrapper">
@@ -113,7 +120,7 @@ class Home extends Component {
                 style={{ marginBottom: "150px" }}
               >
                 <div className="welcome-container">
-                  <h1>No movies recommended</h1>
+                  <h2>No movies recommended</h2>
                 </div>
               </div>
             )}
