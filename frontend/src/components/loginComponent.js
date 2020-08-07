@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { login } from "../actions/authActions";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
+import star from "../assets/img/star.svg";
 
 class Login extends Component {
   constructor(props) {
@@ -34,42 +35,63 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="outter-box">
-        {this.state.showError ? (
-          <Alert
-            variant="danger"
-            onClose={() => this.setState({ showError: false })}
-            dismissible
-          >
-            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-          </Alert>
-        ) : null}
-        <div>
-          Login
+      <div className="container-forms">
+        <div className="wrap-forms-box">
+          <a href="/">
+            <img src={star} alt="Star" />
+          </a>
+          <h1 className="font-weight-bold mt-3 mb-3">Sign In</h1>
+          {this.state.showError ? (
+            <Alert
+              variant="danger"
+              onClose={() => this.setState({ showError: false })}
+              dismissible
+            >
+              <Alert.Heading as="label">
+                {" "}
+                Email or password incorrect!
+              </Alert.Heading>
+            </Alert>
+          ) : null}
           <form onSubmit={this.handleSubmit}>
-            <div className="form-group row">
-              <input
-                type="email"
-                required
-                onChange={this.handleChangeEmail}
-                placeholder="Email"
-                value={this.state.email}
-              />
+            <div className="form-group">
+              <label className="font-weight-bold">Email</label>
+              <div className="input-border">
+                <input
+                  className="form-control"
+                  type="email"
+                  required
+                  onChange={this.handleChangeEmail}
+                  value={this.state.email}
+                />
+              </div>
             </div>
-            <div className="form-group row">
-              <input
-                type="password"
-                required
-                onChange={this.handleChangePassword}
-                placeholder="Password"
-                autoComplete="on"
-                value={this.state.password}
-              />
+            <div className="form-group">
+              <label className="font-weight-bold">Password</label>
+              <div className="input-border">
+                <input
+                  className="form-control"
+                  type="password"
+                  required
+                  onChange={this.handleChangePassword}
+                  autoComplete="on"
+                  value={this.state.password}
+                />
+              </div>
             </div>
-            <input type="submit" value="Login" />
+            <div className="wrap-forms-button">
+              <div className="border-forms-button">
+                <input
+                  className="btn btn-light"
+                  type="submit"
+                  value="Sign in"
+                />
+              </div>
+            </div>
           </form>
-          <div>
-            <Link to="/register">Register?</Link>
+          <div className="link-to-login-register">
+            <span>Don't have an account?</span>
+            <Link to="/register">Register</Link>
           </div>
         </div>
       </div>
