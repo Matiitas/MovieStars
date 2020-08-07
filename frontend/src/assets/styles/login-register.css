@@ -9,7 +9,7 @@
 .wrap-forms-box {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 450px;
   background-color: #e99f30;
   padding: 30px;
   justify-content: center;
@@ -31,7 +31,7 @@
 
 .border-forms-button {
   text-align: center;
-  margin: 30px 0px;
+  margin-bottom: 20px;
   border: solid 2px black;
   width: min-content;
   overflow: hidden;

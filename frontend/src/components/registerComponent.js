@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import "../assets/styles/register.css";
+import "../assets/styles/login-register.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
+import star from "../assets/img/star.svg";
 
 class Register extends Component {
   constructor(props) {
@@ -73,54 +74,75 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="outter-box">
-        {this.state.showError ? (
-          <Alert
-            variant="danger"
-            onClose={() => this.setState({ showError: false })}
-            dismissible
-          >
-            <Alert.Heading>
-              {" "}
-              {this.state.errors[this.state.errorIndex]}{" "}
-            </Alert.Heading>
-          </Alert>
-        ) : null}
-        <div>
-          Register
+      <div className="container-forms">
+        <div className="wrap-forms-box">
+          <a href="/">
+            <img src={star} alt="Star" />
+          </a>
+          <h2 className="font-weight-bold mt-3 mb-3">Register</h2>
+          {this.state.showError ? (
+            <Alert
+              variant="danger"
+              onClose={() => this.setState({ showError: false })}
+              dismissible
+            >
+              <Alert.Heading as="label">
+                {" "}
+                {this.state.errors[this.state.errorIndex]}{" "}
+              </Alert.Heading>
+            </Alert>
+          ) : null}
           <form onSubmit={this.handleSubmit}>
-            <div className="form-group row">
-              <input
-                type="text"
-                required
-                onChange={this.handleChangeUsername}
-                placeholder="Username"
-                value={this.state.username}
-              />
+            <div className="form-group">
+              <label className="font-weight-bold">Username</label>
+              <div className="input-border">
+                <input
+                  className="form-control"
+                  type="text"
+                  required
+                  onChange={this.handleChangeUsername}
+                  value={this.state.username}
+                />
+              </div>
             </div>
-            <div className="form-group row">
-              <input
-                type="email"
-                required
-                onChange={this.handleChangeEmail}
-                placeholder="Email"
-                value={this.state.email}
-              />
+            <div className="form-group">
+              <label className="font-weight-bold">Email</label>
+              <div className="input-border">
+                <input
+                  className="form-control"
+                  type="email"
+                  required
+                  onChange={this.handleChangeEmail}
+                  value={this.state.email}
+                />
+              </div>
             </div>
-            <div className="form-group row">
-              <input
-                type="password"
-                required
-                onChange={this.handleChangePassword}
-                placeholder="Password"
-                autoComplete="on"
-                value={this.state.password}
-              />
+            <div className="form-group">
+              <label className="font-weight-bold">Password</label>
+              <div className="input-border">
+                <input
+                  className="form-control"
+                  type="password"
+                  required
+                  onChange={this.handleChangePassword}
+                  autoComplete="on"
+                  value={this.state.password}
+                />
+              </div>
             </div>
-            <input type="submit" value="Register" />
+            <div className="wrap-forms-button">
+              <div className="border-forms-button">
+                <input
+                  className="btn btn-light"
+                  type="submit"
+                  value="Register"
+                />
+              </div>
+            </div>
           </form>
-          <div>
-            <Link to="/login">Login?</Link>
+          <div className="link-to-login-register">
+            <span>Already have an account?</span>
+            <Link to="/login">Login</Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/styles/login.css";
+import "../assets/styles/login-register.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/authActions";
@@ -40,7 +40,7 @@ class Login extends Component {
           <a href="/">
             <img src={star} alt="Star" />
           </a>
-          <h1 className="font-weight-bold mt-3 mb-3">Sign In</h1>
+          <h2 className="font-weight-bold mt-3 mb-3">Sign In</h2>
           {this.state.showError ? (
             <Alert
               variant="danger"
