@@ -16,6 +16,7 @@
   background-color: #4b4545;
   padding: 25px 25px;
   border: 1px solid#e99f30;
+  overflow: hidden;
 }
 
 .profile-table tr td {
@@ -30,8 +31,6 @@
 }
 
 .profile-image-container {
-  /*border: 2px solid black;
-  */
   position: relative;
   text-align: center;
   margin-left: 4px;
@@ -54,15 +53,7 @@
   font-size: 30px;
 }
 
-.profile-image-label {
-}
-
 .profile-image-input {
-  /* position: absolute;
-  top: 20px;
-  left: 50px;
-  width: 1px;
-  height: 1px; */
   display: none;
 }
 
@@ -72,4 +63,10 @@
   font-size: 30px;
   margin-top: 2rem;
   margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 670px) {
+  .profile-image-container {
+    display: none;
+  }
 }

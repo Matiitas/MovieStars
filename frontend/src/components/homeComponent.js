@@ -49,7 +49,12 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.fetchMovies();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   fetchMovies = async () => {
@@ -62,12 +67,14 @@ class Home extends Component {
         cult.data.movies.length > 0 ||
         bizarre.data.movies.length > 0
       ) {
-        this.setState({
-          thriller: thriller.data.movies,
-          cult: cult.data.movies,
-          bizarre: bizarre.data.movies,
-          isFetching: false,
-        });
+        if (this._isMounted) {
+          this.setState({
+            thriller: thriller.data.movies,
+            cult: cult.data.movies,
+            bizarre: bizarre.data.movies,
+            isFetching: false,
+          });
+        }
       } else {
         this.setState({ recommend: false, isFetching: false });
       }

@@ -52,7 +52,6 @@ class MovieDetail extends Component {
         if (favorites.data.movies.includes(this.state.movie._id)) {
           this.setState({ alreadyFavorite: true });
         }
-        console.log("Este es el res: ", favorites.data.movies);
       }
     } catch (e) {
       console.log(e);
@@ -64,7 +63,6 @@ class MovieDetail extends Component {
       const { isAuthenticated } = this.props.auth;
       if (isAuthenticated) {
         const result = await addToFavorites(this.state.movie._id);
-        console.log("El result del clickFav: ", result);
         this.setState({ alreadyFavorite: true });
       } else {
         this.setState({ showPopup: true });
@@ -118,14 +116,18 @@ class MovieDetail extends Component {
                         className="button-favorites"
                         onClick={this.handleDeleteFavorite}
                       >
-                        Remove from Favorites
+                        <span style={{ fontSize: "18px" }}>
+                          Remove from Favorites
+                        </span>
                       </button>
                     ) : (
                       <button
                         className="button-favorites"
                         onClick={this.handleClickFavorites}
                       >
-                        Add to Favorites
+                        <span style={{ fontSize: "18px" }}>
+                          Add to Favorites
+                        </span>
                       </button>
                     )}
                   </div>
@@ -200,7 +202,7 @@ function renderListResumen(movie) {
   return (
     <ul className="movie-details-list">
       <li className="justify-content-center">
-        <h3 className="font-weight-bold">{movie.Title}</h3>
+        <h3 className="font-weight-bold">{movie.title}</h3>
       </li>
       <li>
         <h5>Year:</h5>

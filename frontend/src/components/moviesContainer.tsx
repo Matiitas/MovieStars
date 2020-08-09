@@ -77,19 +77,27 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
         break;
       case "imdbRatingDesc":
         arr.sort((a, b) => {
-          if (a.imdbRating >= b.imdbRating) {
-            return -1;
-          } else {
+          if (a.imdbRating === "N/A") {
             return 1;
+          } else {
+            if (a.imdbRating >= b.imdbRating) {
+              return 1;
+            } else {
+              return -1;
+            }
           }
         });
         break;
       case "imdbRatingAsc":
         arr.sort((a, b) => {
-          if (a.imdbRating <= b.imdbRating) {
-            return -1;
-          } else {
+          if (a.imdbRating === "N/A") {
             return 1;
+          } else {
+            if (a.imdbRating <= b.imdbRating) {
+              return 1;
+            } else {
+              return -1;
+            }
           }
         });
         break;

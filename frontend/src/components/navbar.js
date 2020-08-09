@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../actions/authActions";
 import star from "../assets/img/star.svg";
+import hamburger from "../assets/img/hamburger.svg";
 import "../assets/styles/navbar.css";
 import { SlideDown } from "react-slidedown";
 import "react-slidedown/lib/slidedown.css";
@@ -81,7 +82,7 @@ class Navbar extends Component {
           <NavItem name="link-right" text="About" to="/about"></NavItem>
           <NavItem name="link-right" text="Contact" to="/contact"></NavItem>
           {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
-          <NavItem name="link-right-dropdown" img={star}>
+          <NavItem name="link-right-dropdown" img={hamburger}>
             <DropdownMenu
               isAuthenticated={isAuthenticated}
               onClick={this.handleLogout}
@@ -134,7 +135,7 @@ function NavItem(props) {
           <span>{props.text}</span>
         ) : (
           <span>
-            <img src={props.img} alt="Star" />
+            <img src={props.img} alt="svg-img" />
           </span>
         )}
       </Link>

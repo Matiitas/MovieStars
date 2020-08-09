@@ -137,7 +137,10 @@ class Profile extends Component {
                   <div className="favorite-movies">
                     <span>Favorite Movies</span>
                   </div>
-                  <MoviesContainer movies={this.state.user.movies} />
+                  <MoviesContainer
+                    movies={this.state.user.movies}
+                    order="normal"
+                  />
                 </React.Fragment>
               ) : (
                 <div className="favorite-movies text-center">

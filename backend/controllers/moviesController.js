@@ -168,6 +168,7 @@ module.exports = {
               ordered: false,
             });
             res.status(200).json({ movies: addedMovies });
+            console.log("Fue por el try del addedMovies");
           } catch (e) {
             console.log("Error del catch en insertMany: ", e);
             res.status(500).json({ message: "Can't add movies to Database" });
