@@ -30,7 +30,7 @@ class Profile extends Component {
       const user = await getLoggedUserData();
       this.setState({ user: user.data, isFetching: false });
     } catch (e) {
-      console.log(e);
+      this.setState({ isFetching: false });
     }
   };
 
@@ -47,9 +47,7 @@ class Profile extends Component {
         user.profileImage = response.data.newProfileImageName;
         this.setState({ user: user });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   render() {
@@ -62,92 +60,101 @@ class Profile extends Component {
         ) : (
           <div>
             <Navbar />
-            <div className="profile-global-wrapper">
-              <div className="profile-username-edit-button">
-                <span>{this.state.user.username} </span>
-                <Link to="/profile/edit">
-                  <button className="btn btn-primary">Edit Profile</button>
-                </Link>
-              </div>
-              <div className="profile-info-wrapper">
-                <table className="table table-condensed profile-table col-sm-8 mb-0">
-                  <tbody>
-                    <tr>
-                      <td>Username</td>
-                      <td className="col-sm-7">{this.state.user.username} </td>
-                    </tr>
-                    <tr>
-                      <td>Email</td>
-                      <td className="col-sm-7">{this.state.user.email}</td>
-                    </tr>
-                    <tr>
-                      <td>Name</td>
-                      <td className="col-sm-7">
-                        {this.state.user.name ? this.state.user.name : "N/A"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Birth Date</td>
-                      <td className="col-sm-7">
-                        {this.state.user.birthDate
-                          ? this.state.user.birthDate.split("T")[0]
-                          : "N/A"}{" "}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Country</td>
-                      <td className="col-sm-7">
-                        {this.state.user.country
-                          ? this.state.user.country
-                          : "N/A"}{" "}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>City</td>
-                      <td className="col-sm-7">
-                        {this.state.user.city ? this.state.user.city : "N/A"}{" "}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="profile-image-container">
-                  <img
-                    className="profile-image"
-                    src={
-                      "http://localhost:5000/uploads/" +
-                      this.state.user.profileImage
-                    }
-                    alt="Profile"
-                  />
-                  <label className="btn btn-primary btn-sm mt-2">
-                    <ImageIcon size={24} />
-                    <input
-                      className="profile-image-input"
-                      type="file"
-                      name="profileImage"
-                      onChange={this.handleImageChange}
+            {this.state.user ? (
+              <div className="profile-global-wrapper">
+                <div className="profile-username-edit-button">
+                  <span>{this.state.user.username} </span>
+                  <Link to="/profile/edit">
+                    <button className="btn btn-primary">Edit Profile</button>
+                  </Link>
+                </div>
+                <div className="profile-info-wrapper">
+                  <table className="table table-condensed profile-table col-sm-8 mb-0">
+                    <tbody>
+                      <tr>
+                        <td>Username</td>
+                        <td className="col-sm-7">
+                          {this.state.user.username}{" "}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Email</td>
+                        <td className="col-sm-7">{this.state.user.email}</td>
+                      </tr>
+                      <tr>
+                        <td>Name</td>
+                        <td className="col-sm-7">
+                          {this.state.user.name ? this.state.user.name : "N/A"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Birth Date</td>
+                        <td className="col-sm-7">
+                          {this.state.user.birthDate
+                            ? this.state.user.birthDate.split("T")[0]
+                            : "N/A"}{" "}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Country</td>
+                        <td className="col-sm-7">
+                          {this.state.user.country
+                            ? this.state.user.country
+                            : "N/A"}{" "}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>City</td>
+                        <td className="col-sm-7">
+                          {this.state.user.city ? this.state.user.city : "N/A"}{" "}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div className="profile-image-container">
+                    <img
+                      className="profile-image"
+                      src={
+                        "http://localhost:5000/uploads/" +
+                        this.state.user.profileImage
+                      }
+                      alt="Profile"
                     />
-                    Profile Image
-                  </label>
-                </div>
-              </div>
-              {this.state.user.movies.length > 0 ? (
-                <React.Fragment>
-                  {" "}
-                  <div className="favorite-movies">
-                    <span>Favorite Movies</span>
+                    <label className="btn btn-primary btn-sm mt-2">
+                      <ImageIcon size={24} />
+                      <input
+                        className="profile-image-input"
+                        type="file"
+                        name="profileImage"
+                        onChange={this.handleImageChange}
+                      />
+                      Profile Image
+                    </label>
                   </div>
-                  <MoviesContainer
-                    movies={this.state.user.movies}
-                    order="normal"
-                  />
-                </React.Fragment>
-              ) : (
-                <div className="favorite-movies text-center">
-                  <span>You don't have favorite movies</span>
                 </div>
-              )}
-            </div>
+                {this.state.user.movies.length > 0 ? (
+                  <React.Fragment>
+                    {" "}
+                    <div className="favorite-movies">
+                      <span>Favorite Movies</span>
+                    </div>
+                    <MoviesContainer
+                      movies={this.state.user.movies}
+                      order="normal"
+                    />
+                  </React.Fragment>
+                ) : (
+                  <div className="favorite-movies text-center">
+                    <span>You don't have favorite movies</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h2>Something went wrong!</h2>
+              </div>
+            )}
+
             <Footer />
           </div>
         )}

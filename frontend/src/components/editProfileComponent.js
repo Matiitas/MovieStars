@@ -38,9 +38,7 @@ class EditProfile extends Component {
         country: user.data.country,
         city: user.data.city,
       });
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   handleNameChange = (event) => {
@@ -109,9 +107,7 @@ class EditProfile extends Component {
         .then((response) => {
           this.props.history.push("/profile");
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   };
 

@@ -29,9 +29,7 @@ class Navbar extends Component {
   };
 
   handleSearch = (inputSearch) => {
-    if (inputSearch === "" || inputSearch === undefined) {
-      console.log("Search input void");
-    } else {
+    if (inputSearch || inputSearch !== "") {
       this.props.history.push("/search/" + inputSearch + "/1");
       window.location.reload();
     }

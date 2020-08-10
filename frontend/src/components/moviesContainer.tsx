@@ -157,7 +157,7 @@ class MoviesContainer extends Component<IRecipeProps, IRecipeState> {
               return (
                 <Poster
                   onClick={this.handleViewDetails}
-                  key={movie.imdbID}
+                  key={movie._id}
                   movie={movie}
                 />
               );

@@ -21,12 +21,12 @@ class MovieDetail extends Component {
       isFetching: true,
       showPopup: false,
       alreadyFavorite: false,
+      wentWrong: false,
     };
   }
 
   componentDidMount() {
     this.fetchMovie();
-    this.checkIfFavorite();
   }
 
   fetchMovie = async () => {
@@ -34,13 +34,12 @@ class MovieDetail extends Component {
       const { imdbID } = this.props.match.params;
       const movie = await getMovieByImdbID(imdbID);
       if (movie.data.movie) {
-        this.setState(
-          { movie: movie.data.movie[0], isFetching: false },
-          () => this.checkIfFavorite
+        this.setState({ movie: movie.data.movie[0], isFetching: false }, () =>
+          this.checkIfFavorite()
         );
       }
     } catch (e) {
-      console.log(e);
+      this.setState({ isFetching: false, wentWrong: true });
     }
   };
 
@@ -54,7 +53,7 @@ class MovieDetail extends Component {
         }
       }
     } catch (e) {
-      console.log(e);
+      this.setState({ wentWrong: true });
     }
   };
 
@@ -62,13 +61,13 @@ class MovieDetail extends Component {
     try {
       const { isAuthenticated } = this.props.auth;
       if (isAuthenticated) {
-        const result = await addToFavorites(this.state.movie._id);
+        await addToFavorites(this.state.movie._id);
         this.setState({ alreadyFavorite: true });
       } else {
         this.setState({ showPopup: true });
       }
     } catch (e) {
-      console.log(e);
+      this.setState({ wentWrong: true });
     }
   };
 
@@ -76,12 +75,11 @@ class MovieDetail extends Component {
     try {
       const { isAuthenticated } = this.props.auth;
       if (isAuthenticated) {
-        const result = await deleteFromFavorites(this.state.movie._id);
-        console.log("El result del clickDel: ", result);
+        await deleteFromFavorites(this.state.movie._id);
         this.setState({ alreadyFavorite: false });
       }
     } catch (e) {
-      console.log(e);
+      this.setState({ wentWrong: true });
     }
   };
 
@@ -97,7 +95,7 @@ class MovieDetail extends Component {
         <Navbar />
         {this.state.isFetching ? (
           <Loading />
-        ) : (
+        ) : !this.state.wentWrong ? (
           <div className="global-wrapper">
             <div className="first-row">
               <div className="wrapper-poster">
@@ -144,6 +142,10 @@ class MovieDetail extends Component {
                 {renderListMoreInfo(this.state.movie)}
               </div>
             </div>
+          </div>
+        ) : (
+          <div>
+            <h2>Something went wrong!</h2>
           </div>
         )}
         <Footer />

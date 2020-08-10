@@ -79,7 +79,6 @@ class Home extends Component {
         this.setState({ recommend: false, isFetching: false });
       }
     } catch (e) {
-      console.log(e);
       this.setState({ recommend: false, isFetching: false });
     }
   };

@@ -37,7 +37,7 @@ class Search extends Component {
   };
 
   render() {
-    /* const { searchWord } = this.props.match.params; */
+    const { searchWord } = this.props.match.params;
     return (
       <div>
         <NavBar />
@@ -46,12 +46,17 @@ class Search extends Component {
         ) : (
           <React.Fragment>
             <OrderBar onClick={this.handleOrder} />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
+            <div
+              style={{
+                display: "flex",
+                color: "white",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: "15px",
+              }}
+            >
+              <h2 style={{ width: "80%" }}>Results for: {searchWord} </h2>
+            </div>
             <MoviesContainer
               movies={this.state.movies}
               order={this.state.order}
