@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import Login from "./components/loginComponent";
 import Register from "./components/registerComponent";
 import Home from "./components/homeComponent";
@@ -16,25 +21,32 @@ import EditProfile from "./components/editProfileComponent";
 function App() {
   return (
     <Router>
-      <Route path="/" exact component={Home} />
-      <Route path="/search/:searchWord/:page" exact component={Search} />
-      <Route path="/login" exact component={protectRoute(Login, true, false)} />
-      <Route
-        path="/profile"
-        exact
-        component={protectRoute(Profile, false, true)}
-      />
-      <Route
-        path="/profile/edit"
-        exact
-        component={protectRoute(EditProfile, false, true)}
-      />
-      <Route
-        path="/register"
-        exact
-        component={protectRoute(Register, true, false)}
-      />
-      <Route path="/movie/:imdbID" exact component={MovieDetail} />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/search/:searchWord/:page" exact component={Search} />
+        <Route
+          path="/login"
+          exact
+          component={protectRoute(Login, true, false)}
+        />
+        <Route
+          path="/profile"
+          exact
+          component={protectRoute(Profile, false, true)}
+        />
+        <Route
+          path="/profile/edit"
+          exact
+          component={protectRoute(EditProfile, false, true)}
+        />
+        <Route
+          path="/register"
+          exact
+          component={protectRoute(Register, true, false)}
+        />
+        <Route path="/movie/:imdbID" exact component={MovieDetail} />
+        <Redirect to="/" />
+      </Switch>
     </Router>
   );
 }

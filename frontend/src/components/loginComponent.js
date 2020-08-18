@@ -104,19 +104,3 @@ Login.propTypes = {
 };
 
 export default connect(null, { login })(Login);
-
-// En este caso mapStateToProps es null y login seria mapDispatchToProps
-
-/* The connect() function connects a React component to a Redux store.
-
-It provides its connected component with the pieces of the data it
- needs from the store, and the functions it can use to dispatch actions to the store.
-
-It does not modify the component class passed to it; instead, it returns a new,
- connected component class that wraps the component you passed in.
-
-function connect(mapStateToProps?, mapDispatchToProps?, mergeProps?, options?)
-
-The mapStateToProps and mapDispatchToProps deals with your Redux store’s
- state and dispatch, respectively. state and dispatch will be supplied to your
-  mapStateToProps or mapDispatchToProps functions as the first argument. */

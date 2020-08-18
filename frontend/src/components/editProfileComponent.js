@@ -71,11 +71,9 @@ class EditProfile extends Component {
     let birthDate = this.state.birthDate;
 
     const errors = this.state.errors;
-
     const validName = this.validateInputs(name);
     const validCity = this.validateInputs(city);
     const validCountry = this.validateInputs(country);
-
     const formInputs = {};
 
     if (validName) {

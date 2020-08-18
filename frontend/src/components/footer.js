@@ -22,11 +22,6 @@ function Footer(props) {
               <h4>Links</h4>
               <ul className="list-unstyled">
                 <li>
-                  <Link to="/about">
-                    <span>About</span>
-                  </Link>
-                </li>
-                <li>
                   <Link to="/contact">
                     <span>Contact</span>
                   </Link>

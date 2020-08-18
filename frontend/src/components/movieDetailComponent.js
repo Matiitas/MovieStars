@@ -12,6 +12,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import PopUp from "./popup";
 import Footer from "./footer";
+import RenderListMoreInfo from "./renderListMoreInfo";
+import RenderListResumen from "./renderListResumen";
 
 class MovieDetail extends Component {
   constructor(props) {
@@ -133,13 +135,13 @@ class MovieDetail extends Component {
               </div>
               <div className="wrapper-resumen">
                 <div className="resumen-box">
-                  {renderListResumen(this.state.movie)}
+                  <RenderListResumen movie={this.state.movie} />
                 </div>
               </div>
             </div>
             <div className="second-row">
               <div className="wrapper-second">
-                {renderListMoreInfo(this.state.movie)}
+                <RenderListMoreInfo movie={this.state.movie} />
               </div>
             </div>
           </div>
@@ -152,104 +154,6 @@ class MovieDetail extends Component {
       </div>
     );
   }
-}
-
-function renderListMoreInfo(movie) {
-  return (
-    <ul className="movie-details-list">
-      <li>
-        <h5>Plot:</h5>
-        <h6> {movie.plot ? movie.plot : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Writer:</h5>
-
-        <h6> {movie.writer ? movie.writer : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Production:</h5>
-
-        <h6> {movie.production ? movie.production : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Language:</h5>
-
-        <h6> {movie.language ? movie.language : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Rated:</h5>
-        <h6> {movie.rated ? movie.rated : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Awards:</h5>
-        <h6> {movie.awards ? movie.awards : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>IMDB:</h5>
-        <h6> {movie.imdbRating ? movie.imdbRating : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Rotten Tomatoes:</h5>
-        <h6> {movie.ratings[1] ? movie.ratings[1].Value : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Metacritic:</h5>
-        <h6> {movie.ratings[2] ? movie.ratings[2].Value : "N/A"}</h6>
-      </li>
-    </ul>
-  );
-}
-
-function renderListResumen(movie) {
-  return (
-    <ul className="movie-details-list">
-      <li className="justify-content-center">
-        <h3 className="font-weight-bold">{movie.title}</h3>
-      </li>
-      <li>
-        <h5>Year:</h5>
-        <h6> {movie.year ? movie.year : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Duration:</h5>
-
-        <h6> {movie.runtime ? movie.runtime : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Genre:</h5>
-
-        <h6> {movie.genre ? movie.genre : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Director:</h5>
-
-        <h6> {movie.director ? movie.director : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Actors:</h5>
-        <h6> {movie.actors ? movie.actors : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>Country:</h5>
-
-        <h6> {movie.country ? movie.country : "N/A"}</h6>
-      </li>
-      <li>
-        <h5>IMDB:</h5>
-        {movie.imdbID ? (
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={"https://www.imdb.com/title/" + movie.imdbID}
-          >
-            <h5>{movie.imdbID}</h5>
-          </a>
-        ) : (
-          "N/A"
-        )}
-      </li>
-    </ul>
-  );
 }
 
 MovieDetail.propTypes = {

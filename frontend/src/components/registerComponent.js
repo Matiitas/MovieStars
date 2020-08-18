@@ -150,14 +150,4 @@ class Register extends Component {
   }
 }
 
-/* Register.propTypes = {
-  auth: PropTypes.object.isRequired,
-}; */
-
-/* function mapStateToProps(state) {
-  return {
-    auth: state.auth,
-  };
-} */
-
 export default Register;
