@@ -37,7 +37,7 @@ const DropdownMenu = (props) => {
 
   return (
     <SlideDown className="drop-hamburger">
-      <DropdownItem to="/contact">Contact</DropdownItem>
+      <DropdownItem to="/about">About</DropdownItem>
       {props.isAuthenticated ? isAuthenticated(props.onClick) : isGuest()}
     </SlideDown>
   );

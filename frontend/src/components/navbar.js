@@ -79,7 +79,7 @@ class Navbar extends Component {
             onClick={this.handleReload}
           ></NavItem>
           <SearchBar onSearch={this.handleSearch} />
-          <NavItem name="link-right" text="Contact" to="/contact"></NavItem>
+          <NavItem name="link-right" text="About" to="/about"></NavItem>
           {isAuthenticated ? this.authenticatedLinks() : this.guestLinks()}
           <NavItem name="link-right-dropdown" img={hamburger}>
             <DropdownMenu

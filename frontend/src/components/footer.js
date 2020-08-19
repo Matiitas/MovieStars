@@ -22,14 +22,18 @@ function Footer(props) {
               <h4>Links</h4>
               <ul className="list-unstyled">
                 <li>
-                  <Link to="/contact">
-                    <span>Contact</span>
+                  <Link to="/about">
+                    <span>About</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/">
-                    <span>Github</span>
-                  </Link>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://github.com/Matiitas"
+                  >
+                    <span>GitHub</span>
+                  </a>
                 </li>
               </ul>
             </div>

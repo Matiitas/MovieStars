@@ -1,4 +1,3 @@
-let User = require("../models/userModel");
 let Movie = require("../models/movieModel");
 const axios = require("axios");
 

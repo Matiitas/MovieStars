@@ -45,9 +45,6 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-////////////////////////////////////////////
-// LA RUTA ES http://localhost:5000/api/v1/users
-
 router
   .route("/register")
   .post(validateEmail, validateUsername, checkIfExist, addUser);
