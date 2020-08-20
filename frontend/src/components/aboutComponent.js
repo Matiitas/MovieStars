@@ -17,11 +17,6 @@ const About = (props) => {
               }}
             >
               <h1>About MovieStars</h1>
-<<<<<<< HEAD
-=======
-              <h3>Branch Prueba-1</h3>
-              <h3>Branch Prueba-2</h3>
->>>>>>> prueba-2
               <br />
               <p>
                 MovieStars was created by Matias Caballero, a university student
